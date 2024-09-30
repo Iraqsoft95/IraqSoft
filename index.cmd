@@ -415,7 +415,7 @@ echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p choice="Please choose an option : "
-if "%choice%"=="1" set url=%Canon_6030_Url%& set %Canon_6030_File%& goto Start_Download
+if "%choice%"=="1" set url=%Canon_6030_Url%& set output=%Canon_6030_File%& goto Start_Download
 if "%choice%"=="2" set url=%pos_Url%& set output=%pos_File%& goto Start_Download
 if "%choice%"=="3" set url=%BARCODE_Url%& set output=%BARCODE_File%& goto Start_Download
 if "%choice%"=="4" set url=%IPOS_JJ_Url%& set output=%IPOS_JJ_File%& goto Start_Download
