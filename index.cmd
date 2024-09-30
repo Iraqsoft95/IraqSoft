@@ -1,4 +1,5 @@
 @ECHO OFF 
+title IRAQSOFT SUPPORT TOOLS v.0.0.0.1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
 @REM ----------->check if file Run Us Admin
@@ -66,23 +67,23 @@ set Shipping_Plus_2.2.2.2_UPDATE_URL= "https://www.dropbox.com/scl/fi/7ei98af4bx
 set Shipping_Plus_2.2.2.2_UPDATE_FILE= "%Download_Path%\Shipping_Plus_UBDAT_2.2.2.2.exe"
 
 @REM -----------> SQL 
-set Sql_2008_URL= "https://edef7.pcloud.com/cfZizHfU9Zrqiq0cZya0SZZjfkPkkZ2ZZRkHZZd0NSFZa5ZMkZj7ZsHZkpZUJZzpZDkZDVZDXZ20Z7pZ8pZfXZHWedlp26mcm5JWCnEhIk0zzpRb7y/SQL2008.rar"
+set Sql_2008_URL= "https://www.dropbox.com/scl/fi/w8s9ydvadw7i03n5rx3sk/SQL2008.rar?rlkey=31t2odlh77r2mvfqoii10s2in&st=hc3z4q81&dl=0"
 set Sql_2008_FILE="%Download_Path%\SQL2008.rar"
-set Sql_2012_URL= "https://edef4.pcloud.com/cfZbtOfU9ZW7060cZya0SZZ9YVPkkZ2ZZRkHZZEFVamZb5Zs5Zr7ZpFZp5ZeVZu7ZXFZI7ZEXZ05ZrXZUJZVHZCViumTowyFVEbra2tdAtjBWs6mXX/SQL2012.rar"
+set Sql_2012_URL= "https://www.dropbox.com/scl/fi/afywqc62q7xp5206z87az/SQL2012.rar?rlkey=8ybh23ox4zx6ma4njpldvj0ph&st=4b6qwed7&dl=0"
 set Sql_2012_FILE="%Download_Path%\SQL2012.rar"
-set Sql_2014_URL= "https://edef6.pcloud.com/cfZoDofU9ZGys60cZya0SZZzmVPkkZ2ZZRkHZZfJR7RZd0ZPVZdJZvJZJ0ZPFZoJZJkZ6FZOHZiFZcHZNFZWkZbYeqV08OfBBiz2wr9hlPB8TJYDGk/SQL2014.rar"
+set Sql_2014_URL= "https://www.dropbox.com/scl/fi/55e2jnjig6uboj19qmmut/SQL2014.rar?rlkey=rhf8hrs4s85morb8jehq5pikb&st=h2hn0t69&dl=0"
 set Sql_2014_FILE="%Download_Path%\SQL2014.rar"
-set Sql_2019_URL= "https://edef11.pcloud.com/DLZ2vOfU9Zvb060cZya0SZZEmVPkkZ2ZZRkHZZiO5XZaJZAHZbkZfax53T9wWbVpmgHL5uDtJX3Xkt57/SQL2019.rar"
-set Sql_2019_FILE1="%Download_Path%\SQL2019.rar"
+set Sql_2019_URL= "https://www.dropbox.com/scl/fi/myr9szghvrcj034r3jqqz/SQL2019.rar?rlkey=hxgslitwbkd5l1c4ofw9vtp86&st=n0hhzel1&dl=0"
+set Sql_2019_FILE="%Download_Path%\SQL2019.rar"
 
 @REM -----------> Aman 
 set Aman_URL="https://www.dropbox.com/scl/fi/mmb09081w93d4o11b6q6o/AMAN_AutoBackup.exe?rlkey=yi81hsbjsmml5zwjjmfvr78cc&st=kcd1p6d8&dl=0"
 set Aman_FILE="%Download_Path%\AMAN_AutoBackup.exe"
 
 @REM -----------> Service_Programs 
-set dControl_URL="https://edef2.pcloud.com/D4Zs71KE9ZatVgkcZya0SZZoSdgkkZ2ZZRkHZkZYF7kZ9kZSkZmXZT6hPZJ7K5xXlicwuUfYdN1dcHMmvzOjfX/dControl.zip"
+set dControl_URL="https://www.dropbox.com/scl/fi/4ihviyjlh1bks381c1oer/dControl.zip?rlkey=6akkbin92d7hi02bacisi1qfb&st=lxyoaret&dl=0"
 set dControl_FILE="%Download_Path%\dControl.zip"
-set WUB_URL="https://edef6.pcloud.com/D4ZhHm4fuZE9ul7cZya0SZZEUlgkkZ2ZZRkHZkZI4dVZ57ZSVZ40ZjLhPZhftQuNgsDx5X6RjSbVF8shAUVgu7/Wub_v1.8.zip"
+set WUB_URL="https://www.dropbox.com/scl/fi/gsr9hpih8qa6ajdhdm2w4/Wub_v1.8.zip?rlkey=rzpwu3xd4s2wmf1te6umlb20o&st=craz4f1v&dl=0"
 set WUB_FILE="%Download_Path%\Wub_v1.8.zip"
 set Windows_Activity_URL="https://edef12.pcloud.com/cfZE5eKE9ZyA5gkcZya0SZZVedgkkZ2ZZRkHZZe7eQZj0ZTXZmHZ1HZLpZnkZRHZ10ZQpZLHZjXZEVZiFZF5Z6On8aupWMkuoN0inS6PNvf4aEhRy/KMSAuto%20Net.rar"
 set Windows_Activity_FILE= "%Download_Path%\KMSAutoNet.rar"
@@ -124,7 +125,6 @@ set Printer_Tool_File="%Download_Path%\printer-tools.rar"
 @REM -------------------------> Main_Menu <----------------------------- 
 :Main_Menu
 cls
-title IRAQSOFT SUPPORT TOOLS
 echo.
 echo.
 echo                               WLECOME TO IRAQ SOFT SUPPORT TOOLS
@@ -355,7 +355,7 @@ set /p SQL_choice="Please choose an option : "
 if "%SQL_choice%"=="1" set url= %Sql_2008_URL%& set output=%Sql_2008_FILE%& goto Start_Download
 if "%SQL_choice%"=="2" set url= %Sql_2012_URL%& set output=%Sql_2012_FILE%& goto Start_Download
 if "%SQL_choice%"=="3" set url= %Sql_2014_URL%& set output=%Sql_2014_FILE%& goto Start_Download
-if "%SQL_choice%"=="4" set url= %Sql_2019_URL%& set output=%Sql_2019_URL%& goto Start_Download
+if "%SQL_choice%"=="4" set url= %Sql_2019_URL%& set output=%Sql_2019_FILE%& goto Start_Download
 if "%SQL_choice%"=="5" goto Main_Menu
 
 echo Invalid choice! Please choose again.
