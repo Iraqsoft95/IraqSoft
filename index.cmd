@@ -125,7 +125,7 @@ set Printer_Tool_File="%Download_Path%\printer-tools.rar"
 
 @REM -------------------------> Batch Config <-----------------------------
 :Start_Code
-set config=iqs
+set config=22
 cls
 echo.
 echo.                             
@@ -137,7 +137,7 @@ set /p  Type_config=".       Type The Password To Enter to The Tool : " /i
 echo.                                          
 
 if "%Type_config%"=="%config%" goto Main_Menu
-echo Invalid choice! Please choose again.
+echo Invalid covfig! Please try again.
 pause
 goto Start_Code
 @REM -------------------------> Main_Menu <----------------------------- 
