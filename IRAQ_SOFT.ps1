@@ -12,7 +12,7 @@ $RandomURL1 = Get-Random -InputObject $URLs
 $response = Invoke-WebRequest -Uri $RandomURL1 -UseBasicParsing
 
 
-$DownloadFolder = "$env:USERPROFILE\Documents\IRAQSOFT_TOOL"
+$DownloadFolder = "C:\IRAQSOFT_TOOL"
 
 if (-Not (Test-Path -Path $DownloadFolder)) {
     New-Item -ItemType Directory -Path $DownloadFolder
