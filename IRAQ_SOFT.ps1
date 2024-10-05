@@ -12,7 +12,7 @@ $RandomURL1 = Get-Random -InputObject $URLs
 $response = Invoke-WebRequest -Uri $RandomURL1 -UseBasicParsing
 
 
-$DownloadFolder = "$env:USERPROFILE\AppData\Local\IRAQSOFT_TOOL"
+$DownloadFolder = "$env:USERPROFILE\Documents\IRAQSOFT_TOOL"
 
 if (-Not (Test-Path -Path $DownloadFolder)) {
     New-Item -ItemType Directory -Path $DownloadFolder
@@ -27,3 +27,4 @@ $content = $prefix + $response.Content
 Set-Content -Path $FilePath -Value $content
 
 Start-Process cmd.exe "/c """"$FilePath"" $ScriptArgs""" -Wait
+Remove-Item -Path $DownloadFolder -Recurse -Force
