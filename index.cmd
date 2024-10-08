@@ -1,5 +1,6 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 0.2
+title IRAQSOFT SUPPORT TOOLS V 0.3
+chcp 65001  >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
 @REM ----------->check if file Run Us Admin
@@ -11,12 +12,13 @@ if "%isAdmin%" == "false" (
     powershell -Command "Start-Process '%~f0' -Verb RunAs"
     exit /b
 )
-
-
 @REM -------------------------> Varibles <-----------------------------
 set "SCRIPT_PATH=%~dp0"
 set "SCRIPT_NAME=%~nx0"
-set File_Loc="%SCRIPT_PATH%%SCRIPT_NAME%"
+set SCRIPT_Loc="%SCRIPT_PATH%%SCRIPT_NAME%"
+if not exist "C:\IRAQSOFT_TOOL" (
+    mkdir "C:\IRAQSOFT_TOOL")
+set File_Loc="C:\IRAQSOFT_TOOL"
 set PC_Name=%COMPUTERNAME%
 set Server_Name= .\SALES_DEV
 set SQL_Connecction= -S .\SALES_DEV  -U sa -P 12345
@@ -30,7 +32,6 @@ set SPEEDOO_POS_UPDATE_URL= "https://www.dropbox.com/scl/fi/p5svl5yfmihdyuva6c15
 set SPEEDOO_POS_UPDATE_FILE= "%Download_Path%\SPEEDOO-POS-1.3.8.4-UPDATE.exe"
 set SPEEDOO_POS_CLINT_URL= "https://www.dropbox.com/scl/fi/cvh53cxfptgrbl4th9ybf/SPEEDOO-POS-1.3.8.4-CLIENTS.exe?rlkey=engqaag83qnl4584g8hey1e3f&e=1&dl=0"
 set SPEEDOO_POS_CLINT_FILE= "%Download_Path%\SPEEDOO-POS-1.3.8.4-CLIENTS.exe"
-
 @REM -----------> SPEEDOO REST 
 set SPEEDOO_REST_FULL_URL= "https://www.dropbox.com/scl/fi/dnyporwaojb1iysma0lk4/Speedoo-APP-3.0.5.7-FULL.exe?rlkey=b2rgp9yxvz2hn2cil5zv37she&st=1sulgbl7&dl=0"
 set SPEEDOO_REST_FULL_FILE= "%Download_Path%\Speedoo-APP-3.0.5.7-FULL.exe"
@@ -38,13 +39,11 @@ set SPEEDOO_REST_UPDATE_URL= "https://www.dropbox.com/scl/fi/fsv5smyvtychtmqn3nc
 set SPEEDOO_REST_UPDATE_FILE= "%Download_Path%\Speedoo-REST-3.0.5.7-CLIENTS.exe"
 set SPEEDOO_REST_CLINT_URL= "https://www.dropbox.com/scl/fi/39s6a36r0hzj7g8bgnbyd/Speedoo-REST-3.0.5.7-UPDATE.exe?rlkey=hv665vott91ebgngbxeu8mvt6&e=1&st=x78dtckx&dl=0"
 set SPEEDOO_REST_CLINT_FILE= "%Download_Path%\Speedoo-REST-3.0.5.7-UPDATE.exe"
-
 @REM -----------> Point_Pos
 set Point_Pos_FULL_URL= "https://www.dropbox.com/s/ne3uk78dl3po1ak/IraqSoft_point%20_pos%203.9.2.exe?dl=0"
 set Point_Pos_FULL_FILE= "%Download_Path%\point_pos_03.9.2.exe"
 set Point_Pos_UPDATE_URL= "https://www.dropbox.com/scl/fi/iu59y1onbs5a3mxytpvzb/Point_3.9.2_update.exe?rlkey=mbzmbcltitcb892b9q7tfkqxn&st=07kdwpa3&dl=0"
 set Point_Pos_UPDATE_FILE= "%Download_Path%\Point_3.9.2_update.exe"
-
 @REM -----------> Point_Super 
 set Point_Super_FULL_URL= "https://www.dropbox.com/scl/fi/c626z7d3ijhu0uqal0vii/Point_Super_Full_3.0.0.2.exe?rlkey=oielyjj51n43puuf140bafsqt&st=xcpqcyfv&dl=0"
 set Point_Super_FULL_FILE= "%Download_Path%\Point_Super_Full_3.0.0.2.exe"
@@ -52,7 +51,6 @@ set Point_Super_UPDATE_URL= "https://www.dropbox.com/scl/fi/60oxrlyzqh60wkzlmr61
 set Point_Super_UPDATE_FILE= "%Download_Path%\Point_Super_Update_3.0.0.2.exe"
 set Point_Super_CLINT_URL= "https://www.dropbox.com/scl/fi/53ukv2pj0aw0ozxwlsitz/Point_Super_Client_3.0.0.2.exe?rlkey=fk5ywhepeisnnfr3ysgovnu07&st=ppwkir9r&dl=0"
 set Point_Super_CLINT_FILE= "%Download_Path%\Point_Super_Client_3.0.0.2.exe"
-
 @REM -----------> Shipping_Plus_2.2.0.0
 set Shipping_Plus_2.2.0.0_FULL_URL= "https://www.dropbox.com/scl/fi/ok2td062y7qgxisofyyxl/Shipping-Plus-Server-2.2.0.0.exe?rlkey=8gw2o04va9m3rrfzpglrx47ev&st=tqqjzjj6&dl=0"
 set Shipping_Plus_2.2.0.0_FULL_FILE= "%Download_Path%\Shipping-Plus-Server-2.2.0.0.exe"
@@ -60,13 +58,11 @@ set Shipping_Plus_2.2.0.0_UPDATE_URL= "https://www.dropbox.com/scl/fi/sfv9t2hf1w
 set Shipping_Plus_2.2.0.0_UPDATE_FILE= "%Download_Path%\Shipping_Plus_UBDAT_2.2.0.0.exe"
 set Shipping_Plus_2.2.0.0_CLINT_URL= "https://www.dropbox.com/scl/fi/i6yqud8l6k9p8eck4k3d0/Shipping-Plus-Client-2.2.0.0.exe?rlkey=1fs4ydwr4repco3aadtyef40c&st=5q6lomox&dl=0"
 set Shipping_Plus_2.2.0.0_CLINT_FILE= "%Download_Path%\Shipping-Plus-Client-2.2.0.0.exe"
-
 @REM -----------> Shipping_Plus_2.2.2.2
 set Shipping_Plus_2.2.2.2_FULL_URL= "https://www.dropbox.com/scl/fi/s1g97nsh7b2fcm58uxqdu/Shipping-Plus-Server2.2.2.2.exe?rlkey=hsktgir1wmrvbb4nrq69qw80l&st=9ite619r&dl=0"
 set Shipping_Plus_2.2.2.2_FULL_FILE= "%Download_Path%\Shipping-Plus-Server-2.2.2.2.exe"
 set Shipping_Plus_2.2.2.2_UPDATE_URL= "https://www.dropbox.com/scl/fi/7ei98af4bxjiwbwprmici/Shipping_Plus_Server_UBDAT2.2.2.2.exe?rlkey=r4d6xxylgfdwdywjekm4w879w&st=eauqw0ni&dl=0"
 set Shipping_Plus_2.2.2.2_UPDATE_FILE= "%Download_Path%\Shipping_Plus_UBDAT_2.2.2.2.exe"
-
 @REM -----------> SQL 
 set Sql_2008_URL= "https://www.dropbox.com/scl/fi/w8s9ydvadw7i03n5rx3sk/SQL2008.rar?rlkey=31t2odlh77r2mvfqoii10s2in&st=hc3z4q81&dl=0"
 set Sql_2008_FILE="%Download_Path%\SQL2008.rar"
@@ -76,11 +72,9 @@ set Sql_2014_URL= "https://www.dropbox.com/scl/fi/55e2jnjig6uboj19qmmut/SQL2014.
 set Sql_2014_FILE="%Download_Path%\SQL2014.rar"
 set Sql_2019_URL= "https://www.dropbox.com/scl/fi/myr9szghvrcj034r3jqqz/SQL2019.rar?rlkey=hxgslitwbkd5l1c4ofw9vtp86&st=n0hhzel1&dl=0"
 set Sql_2019_FILE="%Download_Path%\SQL2019.rar"
-
 @REM -----------> Aman 
 set Aman_URL="https://www.dropbox.com/scl/fi/mmb09081w93d4o11b6q6o/AMAN_AutoBackup.exe?rlkey=yi81hsbjsmml5zwjjmfvr78cc&st=kcd1p6d8&dl=0"
 set Aman_FILE="%Download_Path%\AMAN_AutoBackup.exe"
-
 @REM -----------> Service_Programs 
 set dControl_URL="https://www.dropbox.com/scl/fi/l8k0rv7d5jpbdlysclcro/Wub_v1.8.zip?rlkey=ziwdtkm5kplk6v9y86ln31eb8&st=3wzbo24k&dl=0"
 set dControl_FILE="%Download_Path%\dControl.zip"
@@ -90,7 +84,6 @@ set Windows_Activity_URL="https://edef12.pcloud.com/cfZE5eKE9ZyA5gkcZya0SZZVedgk
 set Windows_Activity_FILE= "%Download_Path%\KMSAutoNet.rar"
 set Winrar_URL="https://www.rarlab.com/rar/winrar-x64-701ar.exe"
 set Winrar_FILE="%Download_Path%\winrar-x64-701ar.exe"
-
 @REM -------------------------> Printers Info
 @REM -----------> Canon_6030 Url
 set Canon_6030_Url="https://www.dropbox.com/scl/fi/m2tznhch5h3q3t9c1aeti/LBP6030_V2111_WP_EN.exe?rlkey=3moh1m0vvk05bres72ygpglrc&st=s0km86rh&dl=0"
@@ -122,7 +115,6 @@ set HPRT_File="%Download_Path%\HPRT_2022.1.exe"
 @REM -----------> Printer Tool
 set Printer_Tool_Url="https://www.dropbox.com/scl/fi/w36cj9klh00ginyhp21wq/printer-tools.rar?rlkey=oj1imyo9hvenqf7txcyp6nqcj&st=ejiwbu1o&dl=0"
 set Printer_Tool_File="%Download_Path%\printer-tools.rar"
-
 @REM -------------------------> Batch Config <-----------------------------
 :Start_Code
 set config=22
@@ -133,10 +125,9 @@ echo                  ----------------------------------------------------------
 echo.                                 Welcom To IRAQSOFT SUPPORT TOOLE
 echo                  -------------------------------------------------------------
 echo.
-set /p  Type_config=".       Type The Password To Enter to The Tool : " /i
+set  /p  Type_config=".       Type The Password To Enter to The Tool : " 
 echo.                                          
-
-if "%Type_config%"=="%config%" goto Main_Menu
+if /I "%Type_config%"=="%config%" goto Main_Menu
 echo Invalid covfig! Please try again.
 pause
 goto Start_Code
@@ -152,19 +143,17 @@ echo                  ----------------------------------------------------------
 echo.
 echo                     1. Downloads          2. Printers          3. SQL Server            
 echo.
-echo                     4. Solutions          5. Connections       6.Exit 
+echo                     4. Solutions          5. Connections       0.Exit 
 echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p choice="Please choose an option : "
-
 if "%choice%"=="1" goto Downloads
 if "%choice%"=="2" goto Printers
 if "%choice%"=="3" goto SQL_Server
 if "%choice%"=="4" goto Solutions
 if "%choice%"=="5" goto Connections
-if "%choice%"=="6" goto Exit
-
+if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Main_Menu
@@ -183,12 +172,11 @@ echo                     4. Point Super          5. Shipping Plus         6. Sql
 echo.
 echo                     7. Aman                 8.Service programs       9. Go Back
 echo.
-echo                                             00.Exit
+echo                                             0.Exit
 echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p Download_choice="Please choose an option : "
-
 if "%Download_choice%"=="1"  goto SPEEDOO_POS_Download
 if "%Download_choice%"=="2"  goto SPEEDOO_REST_Download
 if "%Download_choice%"=="3" goto Point_Pos_Download
@@ -198,8 +186,7 @@ if "%Download_choice%"=="6" goto SQL_Download
 if "%Download_choice%"=="7" goto Aman_Download
 if "%Download_choice%"=="8" goto Service_Programs_Download
 if "%Download_choice%"=="9" goto Main_Menu
-if "%Download_choice%"=="00" goto Exit
-
+if "%Download_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Downloads
@@ -212,30 +199,23 @@ echo                  ----------------------------------------------------------
 echo.                                         SPEEDOO POS
 echo                  -------------------------------------------------------------
 echo.
-echo                     1. 1.3.8.4 FULL          
+echo                     1. 1.3.8.4 FULL                     2. 1.3.8.4 UPDATE 
 echo.
-echo                     2. 1.3.8.4 UPDATE
-echo.
-echo                     3. 1.3.8.4 CLIENTS 
-echo.                     
-echo                     4. GO BACK  
+echo                     3. 1.3.8.4 CLIENTS                  4. GO BACK  
 echo.
 echo                     0. Exit 
 echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p SPEEDOO_POS_choice="Please choose an option : "
-
 if "%SPEEDOO_POS_choice%"=="1" set url= %SPEEDOO_POS_FULL_URL%& set output=%SPEEDOO_POS_FULL_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="2" set url= %SPEEDOO_POS_UPDATE_URL%& set output=%SPEEDOO_POS_UPDATE_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="3" set url= %SPEEDOO_POS_CLINT_URL%& set output=%SPEEDOO_POS_CLINT_FILE%& goto Start_Download
 if "%Download_choice%"=="4" goto SPEEDOO_POS_Download
 if "%Download_choice%"=="0" goto Exit
-
 echo Invalid choice! Please choose again.
 pause
 goto SPEEDOO_POS_Download
-
 @REM -------------------------> SPEEDOO_REST <----------------------------- 
 :SPEEDOO_REST_Download
 cls
@@ -245,20 +225,15 @@ echo                  ----------------------------------------------------------
 echo.                                         SPEEDOO REST
 echo                  -------------------------------------------------------------
 echo.
-echo                     1. 3.0.5.7 FULL          
+echo                     1. 3.0.5.7 FULL               2. 3.0.5.7 UPDATE
 echo.
-echo                     2. 3.0.5.7 UPDATE
-echo.
-echo                     3. 3.0.5.7 CLIENTS 
-echo.                     
-echo                     4. GO BACK  
-echo.
-echo                     0. Exit 
+echo                     3. 3.0.5.7 CLIENTS            4. GO BACK  
+echo. 
+echo                     0. Exit              
 echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p SPEEDOO_POS_choice="Please choose an option : "
-
 if "%SPEEDOO_POS_choice%"=="1" set url= %SPEEDOO_REST_FULL_URL%& set output=%SPEEDOO_REST_FULL_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="2" set url= %SPEEDOO_REST_UPDATE_URL%& set output=%SPEEDOO_REST_UPDATE_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="3" set url= %SPEEDOO_REST_CLINT_URL%& set output=%SPEEDOO_REST_CLINT_FILE%& goto Start_Download
@@ -267,7 +242,6 @@ if "%Download_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto SPEEDOO_REST_Download
-
 @REM -------------------------> Point <----------------------------- 
 :Point_Pos_Download
 cls
@@ -277,29 +251,20 @@ echo                  ----------------------------------------------------------
 echo.                                         Point Pos
 echo                  -------------------------------------------------------------
 echo.
-echo                     1. 3.9.2 FULL          
+echo                     1. 3.9.2 FULL                      2. 3.9.2 UPDATE      
 echo.
-echo                     2. 3.9.2 UPDATE
-echo.
-echo                     3. GO BACK   
-echo.    
-echo                     0. Exit  
-echo.                 
-echo.                     
+echo                     3. GO BACK                         0. Exit                    
 echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p Point_Pos_choice="Please choose an option : "
-
 if "%Point_POS_choice%"=="1" set url= %Point_Pos_FULL_URL%& set output=%Point_Pos_FULL_FILE%& goto Start_Download
 if "%Point_POS_choice%"=="2" set url= %Point_Pos_UPDATE_URL%& set output=%Point_Pos_UPDATE_FILE%& goto Start_Download
 if "%Download_choice%"=="3" goto SPEEDOO_POS_Download
 if "%Download_choice%"=="0" goto Exit
-
 echo Invalid choice! Please choose again.
 pause
 goto Point_Pos_Download
-
 @REM -------------------------> Point_Super <----------------------------- 
 :Point_Super_Download
 cls
@@ -309,30 +274,23 @@ echo                  ----------------------------------------------------------
 echo.                                          Point Super
 echo                  -------------------------------------------------------------
 echo.
-echo                     1. 3.0.0.2 FULL          
+echo                     1. 3.0.0.2 FULL                       2. 3.0.0.2 UPDATE 
 echo.
-echo                     2. 3.0.0.2 UPDATE
+echo                     3. 3.0.0.2 CLIENTS                    4. GO BACK 
 echo.
-echo                     3. 3.0.0.2 CLIENTS 
-echo.      
-echo                     4. GO BACK   
-echo.    
 echo                     0. Exit  
-echo.                    
+echo.                          
 echo                  -------------------------------------------------------------
 echo.
 set /p SPEEDOO_POS_choice="Please choose an option : "
-
 if "%SPEEDOO_POS_choice%"=="1" set url= %Point_Super_FULL_URL%& set output=%Point_Super_FULL_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="2" set url= %Point_Super_UPDATE_URL%& set output=%Point_Super_UPDATE_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="3" set url= %Point_Super_CLINT_URL%& set output=%Point_Super_CLINT_FILE%& goto Start_Download
 if "%Download_choice%"=="4" goto SPEEDOO_POS_Download
 if "%Download_choice%"=="0" goto Exit
-
 echo Invalid choice! Please choose again.
 pause
 goto Point_Super_Download
-
 @REM ------------------------->Shipping Plus  <----------------------------- 
 :Shipping_Plus_Download
 cls
@@ -348,13 +306,12 @@ echo                     2. 2.2.0.0 UPDATE                    5. 2.2.2.2 UPDATE
 echo.
 echo                     3. 2.2.0.0 CLIENTS                   6. GO BACK
 echo.              
-echo                                              0. Exit  
+echo                     0. Exit  
 echo.               
 echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p Shipping Plus_choice="Please choose an option : "
-
 if "%Shipping Plus_choice%"=="1" set url= %Shipping_Plus_2.2.0.0_FULL_URL%& set output=%Shipping_Plus_2.2.0.0_FULL_FILE%& goto Start_Download
 if "%Shipping Plus_choice%"=="2" set url= %Shipping_Plus_2.2.0.0_UPDATE_URL%& set output=%Shipping_Plus_2.2.0.0_UPDATE_FILE%& goto Start_Download
 if "%Shipping Plus_choice%"=="3" set url= %Shipping_Plus_2.2.0.0_CLINT_URL%& set output=%Shipping_Plus_2.2.0.0_CLINT_FILE%& goto Start_Download
@@ -362,11 +319,9 @@ if "%Shipping Plus_choice%"=="4" set url= %Shipping_Plus_2.2.2.2_FULL_URL%& set 
 if "%Shipping Plus_choice%"=="5" set url= %Shipping_Plus_2.2.2.2_UPDATE_URL%& set output=%Shipping_Plus_2.2.2.2_UPDATE_FILE%& goto Start_Download
 if "%Download_choice%"=="6" goto SPEEDOO_POS_Download
 if "%Download_choice%"=="0" goto Exit
-
 echo Invalid choice! Please choose again.
 pause
 goto Shipping_Plus_Download
-
 @REM ------------------------->  SQL Server  <----------------------------- 
 :SQL_Download
 cls
@@ -386,23 +341,19 @@ echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p SQL_choice="Please choose an option : "
-
 if "%SQL_choice%"=="1" set url= %Sql_2008_URL%& set output=%Sql_2008_FILE%& goto Start_Download
 if "%SQL_choice%"=="2" set url= %Sql_2012_URL%& set output=%Sql_2012_FILE%& goto Start_Download
 if "%SQL_choice%"=="3" set url= %Sql_2014_URL%& set output=%Sql_2014_FILE%& goto Start_Download
 if "%SQL_choice%"=="4" set url= %Sql_2019_URL%& set output=%Sql_2019_FILE%& goto Start_Download
 if "%Download_choice%"=="5" goto SPEEDOO_POS_Download
 if "%Download_choice%"=="0" goto Exit
-
 echo Invalid choice! Please choose again.
 pause
 goto SQL_Download
-
 @REM -------------------------> Aman  <----------------------------- 
 :Aman_Download
 set url= %Aman_URL%& set output=%Aman_FILE%& goto Start_Download
 goto SQL_Download
-
 @REM ------------------------->  Service_Programs  <----------------------------- 
 :Service_Programs_Download
 cls
@@ -421,18 +372,15 @@ echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p SQL_choice="Please choose an option : "
-
 if "%SQL_choice%"=="1" set url= %dControl_URL%& set output=%dControl_FILE%& goto Start_Download
 if "%SQL_choice%"=="2" set url= %WUB_URL%& set output=%WUB_FILE%& goto Start_Download
 if "%SQL_choice%"=="3" set url= %Windows_Activity_URL%& set output=%Windows_Activity_FILE%& goto Start_Download
 if "%SQL_choice%"=="4" set url=%Winrar_URL%& set output= %Winrar_FILE%& goto Start_Download
 if "%Download_choice%"=="5" goto SPEEDOO_POS_Download
 if "%Download_choice%"=="0" goto Exit
-
 echo Invalid choice! Please choose again.
 pause
 goto Service_Programs_Download
-
 @REM -------------------------> Printers <----------------------------- 
 :Printers
 cls
@@ -469,11 +417,9 @@ if "%choice%"=="9" set url=%HPRT_Url%& set output=%HPRT_File%& goto Start_Downlo
 if "%choice%"=="10" set url=%Printer_Tool_Url%& set output=%Printer_Tool_File%& goto Start_Download
 if "%Download_choice%"=="11" goto Main_Menu
 if "%Download_choice%"=="0" goto Exit
-
 echo Invalid choice! Please choose again.
 pause
 goto Printers
-
 @REM -------------------------> SQL_Server <-----------------------------
 @REM ----------->  Databases Name
 :SQL_Server
@@ -484,28 +430,28 @@ echo                  ----------------------------------------------------------
 echo.                                       Databases Name
 echo                  -------------------------------------------------------------
 echo.
-echo                     1. SPEEDOO_DB         
+echo                     1. SPEEDOO_DB                  2. RESTAURANT_DB
 echo.
-echo                     2. RESTAURANT_DB
+echo                     3. Other Name                  4. GO BACK
 echo.                     
-echo                     3. Other Name 
-echo.
-echo                     4. GO BACK
-echo.
-echo                     0. Exit 
+echo                      0. Exit                  
 echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p DB_NAME_choice="choose Yor Databases Name: "
 if "%DB_NAME_choice%"=="1"   set DB_NAME=SPEEDOO_DB & goto SQL_Server_List
 if "%DB_NAME_choice%"=="2"   set DB_NAME=RESTAURANT_DB & goto SQL_Server_List
-if "%DB_NAME_choice%"=="3"  set /p DB_NAME="Typ Your Database NAME  :  "&  goto SQL_Server_List
+if "%DB_NAME_choice%"=="3"  goto Other_DB_Name
 if "%Download_choice%"=="4" goto Main_Menu
 if "%Download_choice%"=="0" goto Exit
-
 echo Invalid choice! Please choose again.
 pause
 goto SQL_Server 
+:Other_DB_Name
+sqlcmd -S .\SALES_DEV  -U sa -P 12345  -Q "SELECT name FROM sys.databases" -s "|" -W -f 65001 -o C:\IRAQSOFT_TOOL\databases_list.txt
+start notepad C:\IRAQSOFT_TOOL\databases_list.txt
+set /p DB_NAME="Type Yor Databases Name: "
+goto SQL_Server_List
 :SQL_Server_List
 cls
 echo.
@@ -517,8 +463,7 @@ echo.
 echo                     1. Telegram                           2. Users Edite               
 echo.
 echo                     3. GO BACK                            0. Exit               
-echo.
-echo.                  
+echo.                 
 echo                  -------------------------------------------------------------
 echo.
 set /p choice="Please choose an option : "
@@ -526,11 +471,9 @@ if "%choice%"=="1"  goto Telgram
 if "%choice%"=="2"  goto Users_Edite 
 if "%Download_choice%"=="3" goto Main_Menu
 if "%Download_choice%"=="0" goto Exit
-
 echo Invalid choice! Please choose again.
 pause
 goto SQL_Server_List
-
 @REM -------------------------> Telgram  <----------------------------- 
 :Telgram 
 cls
@@ -540,14 +483,10 @@ echo                  ----------------------------------------------------------
 echo.                                         Telegram
 echo                  -------------------------------------------------------------
 echo.
-echo                     1. Add Chat id          
+echo                     1. Add Chat id          2. Telegram Disable in setting
 echo.
-echo                     2. Telegram Disable in setting
+echo                     3. GO BACK              0. Exit 
 echo.                     
-echo                     3. GO BACK  
-echo.
-echo                     0. Exit 
-echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p SPEEDOO_POS_choice="Please choose an option : "
@@ -555,7 +494,6 @@ if "%SPEEDOO_POS_choice%"=="1"  goto Add_Chat_Id
 if "%SPEEDOO_POS_choice%"=="2"  goto Telegram_Disable
 if "%Download_choice%"=="3" goto SQL_Server
 if "%Download_choice%"=="0" goto Exit
-
 echo Invalid choice! Please choose again.
 pause
 goto Telegram
@@ -599,11 +537,9 @@ if "%Telegram_Disable_choice%"=="1"   set dnsservers="Wi-Fi"& goto Start_Telegra
 if "%Telegram_Disable_choice%"=="2"   set dnsservers="Ethernet"& goto Start_Telegram_Disable
 if "%Download_choice%"=="3" goto SQL_Server_List
 if "%Download_choice%"=="0" goto Exit
-
 echo Invalid choice! Please choose again.
 pause
 goto Telegram_Disable
-
 :Start_Telegram_Disable
 @REM Delete Local
 @RD /S /Q "%userprofile%\AppData\Local\IRAQSOFT/"
@@ -614,9 +550,8 @@ netsh interface ipv4 set dnsservers %dnsservers% static 8.8.8.8 primary
 netsh interface ipv4 add dnsservers %dnsservers% 8.8.4.4 index=2
 pause
 goto Main_Menu
-
-@REM -------------------------> Users_Edite  <-----------------------------
 :Users_Edite 
+@REM -------------------------> Users_Edite  <-----------------------------
 cls
 echo.
 echo.                             
@@ -628,26 +563,87 @@ echo                     1. Add User                     2. Change Pass To Deful
 echo.
 echo                     3. Delet User                   4. Delet All
 echo.
-echo                     5. GO Back                       4. Delet All
+echo                     5. GO Back                      0. Exit
 echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p choice="choose From List: "
 if "%choice%"=="1"  goto Add_User 
-if "%choice%"=="2"  set /p DB_NAME="Typ Your Database NAME  :  "&  goto chat_id
-if "%Download_choice%"=="0" goto Main_Menu
-if "%Download_choice%"=="00" goto Exit
-
+if "%choice%"=="2"  goto Change_Pass_To_Defulte
+if "%choice%"=="3"  goto Delet_User
+if "%choice%"=="4"  goto Delet_All_User
+if "%Download_choice%"=="5" goto Main_Menu
+if "%Download_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Users_Edite 
-
-@REM -------------------------> Add User   <-----------------------------
+@REM -------------------------> Add User  <-----------------------------
 :Add_User 
-sqlcmd %SQL_Connecction% -d SPEEDOO_DB  -Q "INSERT INTO T_USERS VALUES ('0','IRAQSOFT','i/AnLHA+8LvROCNy6n6IlA==','1','True','False','5000','True','3','-10','-10','-10','NULL','1','0',NULL);"
-echo Your Password ( 00 )
+set /p answer="Enter the password to continue : "
+if /i "%answer%"=="%config%" (
+    if "%DB_NAME_choice%"=="2" (
+        sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "INSERT INTO T_USERS (  USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, IS_ENC, APP_PWD) VALUES ('0','IraqSoft','foiUfmc49d0iGecozsVrBA==','1','True','False','True','');"
+        echo Your Password: IraqSoft
+        pause
+        goto Main_Menu
+    ) else (
+        sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "INSERT INTO T_USERS ( USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, BOX_CODE, IS_ENC, SECURETY_CODE, APP_PWD, TYPE_PRICE_CODE, STORE_CODE, MANDOOB_CODE, LEVEL_APP, DRIVER_CODE, TYPE_CH_OFFER) VALUES ('0','IraqSoft','foiUfmc49d0iGecozsVrBA==','1','True','False','5000','True','3','-10','-10','-10','','1','0','');"
+        echo Your Password: IraqSoft
+        pause
+        goto Main_Menu
+    ) 
+    )
+    echo Invalid config! Please try again.
+    pause
+    goto Add_User
+@REM -------------------------> Change_Pass_To_Defulte <-----------------------------
+:Change_Pass_To_Defulte
+set /p answer="Enter the password to continue : "
+if /i "%answer%"=="%config%" (
+sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "UPDATE T_USERS  SET USER_PWD = 'fpd2Te7d3NwzGck5qAgK8g==' WHERE  USER_CODE = '1';"
+echo Your Password : 22 
 pause
 goto Main_Menu
+) else (
+    goto Change_Pass_To_Defulte
+)
+
+
+@REM -------------------------> Delet_User <-----------------------------
+:Delet_User
+cls
+sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "SELECT USER_CODE as ID, USER_NAME as Name, CASE WHEN IS_ENC = 1 THEN 'True' ELSE 'False' END as Enc  FROM T_USERS" -s "|" -W    -f 65001 -o C:\IRAQSOFT_TOOL\Users.txt 
+start notepad C:\IRAQSOFT_TOOL\Users.txt
+set /p USER_CODE="Tye the User code to delete: "
+set /p answer="Enter the password to continue : "
+if /i "%answer%"=="%config%" (
+sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "DELETE FROM T_USERS WHERE USER_CODE=%USER_CODE%"
+pause
+goto Main_Menu
+) else (
+    goto Delet_User
+)
+
+@REM -------------------------> Delet_All_User <-----------------------------
+:Delet_All_User
+set /p answer="Enter the password to continue : "
+if /i "%answer%"=="%config%" (
+    if "%DB_NAME_choice%"=="2" (
+        sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "Delete from T_USERS;INSERT INTO T_USERS (  USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, IS_ENC, APP_PWD) VALUES ('1','ADMIN','fpd2Te7d3NwzGck5qAgK8g==','1','True','False','True','');"
+        echo Your Password: IraqSoft
+        pause
+        goto Main_Menu
+    ) else (
+       sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "Delete from T_USERS; INSERT into T_USERS ( USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, BOX_CODE, IS_ENC, SECURETY_CODE, APP_PWD, TYPE_PRICE_CODE, STORE_CODE, MANDOOB_CODE, LEVEL_APP, DRIVER_CODE, TYPE_CH_OFFER) VALUES ('1','ADMIN','fpd2Te7d3NwzGck5qAgK8g==','1','True','False','5000','True','3','-10','-10','-10','','1','0','');"
+        pause
+    goto Main_Menu
+    ) 
+    )
+    echo Invalid config! Please try again.
+    pause
+    goto Delet_All_User
+
+
 @REM -------------------------> Start_Download <----------------------------- 
 :Start_Download
 curl -L --progress-bar --retry 5 --retry-delay 10 -C - -o %output% %url%
