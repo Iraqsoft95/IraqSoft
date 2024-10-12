@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 0.3
+title IRAQSOFT SUPPORT TOOLS V 0.4
 chcp 65001  >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -24,6 +24,7 @@ set Server_Name= .\SALES_DEV
 set SQL_Connecction= -S .\SALES_DEV  -U sa -P 12345
 set SQLCMD="C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\sqlcmd.exe"
 set "Download_Path=%USERPROFILE%\Downloads"
+set BACKUP_DIR=C:\Backup
 @REM -------------------------> Downloads Info
 @REM ----------> SPEEDOO POS 
 set SPEEDOO_POS_FULL_URL="https://www.dropbox.com/scl/fi/inwa5nl2ua5hlm1blb7rf/SPEEDOO-POS-1.3.8.4-FULL.exe?rlkey=kpqtgcwg490kxqo01h0ygz746&e=1&dl=0"
@@ -462,14 +463,17 @@ echo                  ----------------------------------------------------------
 echo.
 echo                     1. Telegram                           2. Users Edite               
 echo.
-echo                     3. GO BACK                            0. Exit               
+echo                     3. Backup                             4. GO Back               
 echo.                 
+echo                                           0. Exit              
+echo. 
 echo                  -------------------------------------------------------------
 echo.
 set /p choice="Please choose an option : "
 if "%choice%"=="1"  goto Telgram 
 if "%choice%"=="2"  goto Users_Edite 
-if "%Download_choice%"=="3" goto Main_Menu
+if "%choice%"=="3"  goto Backup
+if "%Download_choice%"=="4" goto Main_Menu
 if "%Download_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
@@ -611,7 +615,6 @@ goto Main_Menu
 
 @REM -------------------------> Delet_User <-----------------------------
 :Delet_User
-cls
 sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "SELECT USER_CODE as ID, USER_NAME as Name, CASE WHEN IS_ENC = 1 THEN 'True' ELSE 'False' END as Enc  FROM T_USERS" -s "|" -W    -f 65001 -o C:\IRAQSOFT_TOOL\Users.txt 
 start notepad C:\IRAQSOFT_TOOL\Users.txt
 set /p USER_CODE="Tye the User code to delete: "
@@ -642,6 +645,78 @@ if /i "%answer%"=="%config%" (
     echo Invalid config! Please try again.
     pause
     goto Delet_All_User
+@REM ------------------------->  Backup <----------------------------- 
+:Backup 
+cls
+echo.
+echo.                             
+echo                  -------------------------------------------------------------
+echo.                                            Backup   
+echo                  -------------------------------------------------------------
+echo.
+echo                     1. Backup Selected Data         2. Backup All Data
+echo.
+echo                     3. GO BACK                      0. Exit 
+echo.                     
+echo                  -------------------------------------------------------------
+echo.
+set /p SPEEDOO_POS_choice="Please choose an option : "
+if "%SPEEDOO_POS_choice%"=="1"  goto Backup_Selected_Data
+if "%SPEEDOO_POS_choice%"=="2"  goto Backup_All_Data
+if "%Download_choice%"=="3" goto SQL_Server
+if "%Download_choice%"=="0" goto Exit
+echo Invalid choice! Please choose again.
+pause
+goto Backup 
+
+@REM -------------------------> Backup_Selected_Data <----------------------------- 
+:Backup_Selected_Data
+rem Get current date and time
+for /f "tokens=1-3 delims=/ " %%a in ('date /t') do (set mydate=%%a-%%b-%%c)
+for /f "tokens=1-2 delims=: " %%a in ('time /t') do (set mytime=%%a-%%b)
+
+rem Format the date and time
+set TIMESTAMP=%mydate%_%mytime%
+
+rem Construct the backup file name
+set BACKUP_FILE=%BACKUP_DIR%\%DB_NAME%_%TIMESTAMP%.bak
+
+rem Perform the backup using sqlcmd
+echo Backup is start .....
+sqlcmd %SQL_Connecction% -Q "BACKUP DATABASE [%DB_NAME%] TO DISK='%BACKUP_FILE%' WITH NOFORMAT, NOINIT, NAME='%DB_NAME%-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS=10"
+
+if not exist "%BACKUP_DIR%" (
+    cls
+    mkdir "%BACKUP_DIR%"
+    echo Folder created: %BACKUP_DIR%
+    goto Backup_Selected_Data
+) 
+cls
+rem Check if the backup was successful
+if errorlevel 1 (
+    echo Backup failed!
+) else (
+    echo Backup successful: %BACKUP_FILE%
+    echo in folder %BACKUP_DIR%
+)
+pause
+goto Main_Menu
+
+@REM -------------------------> Backup_All_Data <----------------------------- 
+:Backup_All_Data
+echo Backup is start .....
+ sqlcmd %SQL_Connecction% -Q "DECLARE @name NVARCHAR(256); DECLARE @backupFile NVARCHAR(256); DECLARE @sql NVARCHAR(MAX); DECLARE @backupDir NVARCHAR(256); SET @backupDir = '%BACKUP_DIR%'; DECLARE db_cursor CURSOR FOR SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'model', 'msdb', 'tempdb'); OPEN db_cursor; FETCH NEXT FROM db_cursor INTO @name; WHILE @@FETCH_STATUS = 0 BEGIN; SET @backupFile = @backupDir + '\' + @name + CONVERT(VARCHAR, GETDATE(), 112) + '_' + REPLACE(CONVERT(VARCHAR, GETDATE(), 108), ':', '-') + '.bak'; SET @sql = 'BACKUP DATABASE [' + @name + '] TO DISK = ''' + @backupFile + ''' WITH NOFORMAT, NOINIT, NAME = ''' + @name + '-Full Database Backup'', SKIP, NOREWIND, NOUNLOAD, STATS = 10'; EXEC sp_executesql @sql; FETCH NEXT FROM db_cursor INTO @name; END; CLOSE db_cursor; DEALLOCATE db_cursor;"
+if not exist "%BACKUP_DIR%" (
+    cls
+    mkdir "%BACKUP_DIR%"
+    echo Folder created: %BACKUP_DIR%
+    goto Backup_All_Data
+) 
+cls 
+echo Backup Successful in folder %BACKUP_DIR%
+
+pause
+goto Main_Menu
 
 
 @REM -------------------------> Start_Download <----------------------------- 
