@@ -805,7 +805,7 @@ if "%TargetPath%"=="" (
     exit /b
 )
 set "TargetDir=%TargetPath%\.."
-mkdir "%Befor_Update_Path_Path%\%MySettingName%"
+mkdir "%Befor_Update_Path%\%MySettingName%"
 robocopy "%TargetDir%\%MySettingName%" "%Befor_Update_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB 
 pause
 goto Main_Menu
