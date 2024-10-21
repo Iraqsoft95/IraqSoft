@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 0.5
+title IRAQSOFT SUPPORT TOOLS V 0.6
 chcp 65001  >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -658,9 +658,9 @@ echo                  ----------------------------------------------------------
 echo.
 echo                     1. Backup Selected Data         2. Backup All Data
 echo.
-echo                     3. Befor Format                 4. GO BACK                      
+echo                     3. Befor Format                 4. Befor Ubdate                  
 echo.  
-echo                     0. Exit 
+echo                     5. GO BACK                      0. Exit 
 echo.                     
 echo                  -------------------------------------------------------------
 echo.
@@ -668,7 +668,8 @@ set /p SPEEDOO_POS_choice="Please choose an option : "
 if "%SPEEDOO_POS_choice%"=="1"  goto Backup_Selected_Data
 if "%SPEEDOO_POS_choice%"=="2"  goto Backup_All_Data
 if "%SPEEDOO_POS_choice%"=="3"  goto Befor_Format
-if "%Download_choice%"=="4" goto SQL_Server
+if "%SPEEDOO_POS_choice%"=="4"  goto Befor_Update
+if "%Download_choice%"=="5" goto SQL_Server
 if "%Download_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
@@ -770,6 +771,42 @@ if "%DB_NAME_choice%" == "2" (
 ) 
 copy "C:\Users\%USERNAME%\Documents\%Serial_File%" "%Befor_Format_Path%\%Serial_File%" /Y
 echo Backup Successful in %Befor_Format_Path%
+pause
+goto Main_Menu
+@REM -------------------------> Befor_Updatet <----------------------------- 
+:Befor_Update
+set Befor_Update_Path=%BACKUP_DIR%/Befor_Update
+@REM -------------------------> Backup Data
+:Befor_Update_Backup
+set Befor_Update_Backup_Path=%Befor_Update_Path%/Backup
+echo Backup is start .....
+ sqlcmd %SQL_Connecction% -Q "DECLARE @name NVARCHAR(256); DECLARE @backupFile NVARCHAR(256); DECLARE @sql NVARCHAR(MAX); DECLARE @backupDir NVARCHAR(256); SET @backupDir = '%Befor_Update_Backup_Path%'; DECLARE db_cursor CURSOR FOR SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'model', 'msdb', 'tempdb'); OPEN db_cursor; FETCH NEXT FROM db_cursor INTO @name; WHILE @@FETCH_STATUS = 0 BEGIN; SET @backupFile = @backupDir + '\' + @name + CONVERT(VARCHAR, GETDATE(), 112) + '_' + REPLACE(CONVERT(VARCHAR, GETDATE(), 108), ':', '-') + '.bak'; SET @sql = 'BACKUP DATABASE [' + @name + '] TO DISK = ''' + @backupFile + ''' WITH NOFORMAT, NOINIT, NAME = ''' + @name + '-Full Database Backup'', SKIP, NOREWIND, NOUNLOAD, STATS = 10'; EXEC sp_executesql @sql; FETCH NEXT FROM db_cursor INTO @name; END; CLOSE db_cursor; DEALLOCATE db_cursor;"
+if not exist "%Befor_Update_Backup_Path%" (
+    cls
+    mkdir "%Befor_Update_Backup_Path%"
+    echo Folder created: %Befor_Update_Backup_Path%
+    goto Befor_Update_Backup
+) 
+@REM -------------------------> Copy Mysetting Speedoo to file 
+if "%DB_NAME_choice%" == "2" (
+    set Shortcut_File=SPEEDOO REST.lnk
+    set MySettingName=MySettingRESTAURANT
+    
+) else (
+    set Shortcut_File=SPEEDOO POS.lnk
+    set MySettingName=MySettingSPEEDOO
+)
+
+set "TargetPath="
+for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('C:\\Users\\%USERNAME%\\Desktop\\%Shortcut_File%').TargetPath"') do set "TargetPath=%%A"
+
+if "%TargetPath%"=="" (
+    echo Shortcut not found or target path could not be determined.
+    exit /b
+)
+set "TargetDir=%TargetPath%\.."
+mkdir "%Befor_Update_Path_Path%\%MySettingName%"
+robocopy "%TargetDir%\%MySettingName%" "%Befor_Update_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB 
 pause
 goto Main_Menu
 @REM -------------------------> Start_Download <----------------------------- 
