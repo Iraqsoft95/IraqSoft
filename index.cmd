@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 0.4
+title IRAQSOFT SUPPORT TOOLS V 0.5
 chcp 65001  >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -24,7 +24,9 @@ set Server_Name= .\SALES_DEV
 set SQL_Connecction= -S .\SALES_DEV  -U sa -P 12345
 set SQLCMD="C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\sqlcmd.exe"
 set "Download_Path=%USERPROFILE%\Downloads"
-set BACKUP_DIR=C:\Backup
+set BACKUP_DIR=C:\MyBackup
+set Befor_Format_Path=C:\Befor_Format
+
 @REM -------------------------> Downloads Info
 @REM ----------> SPEEDOO POS 
 set SPEEDOO_POS_FULL_URL="https://www.dropbox.com/scl/fi/inwa5nl2ua5hlm1blb7rf/SPEEDOO-POS-1.3.8.4-FULL.exe?rlkey=kpqtgcwg490kxqo01h0ygz746&e=1&dl=0"
@@ -656,14 +658,17 @@ echo                  ----------------------------------------------------------
 echo.
 echo                     1. Backup Selected Data         2. Backup All Data
 echo.
-echo                     3. GO BACK                      0. Exit 
+echo                     3. Befor Format                 4. GO BACK                      
+echo.  
+echo                     0. Exit 
 echo.                     
 echo                  -------------------------------------------------------------
 echo.
 set /p SPEEDOO_POS_choice="Please choose an option : "
 if "%SPEEDOO_POS_choice%"=="1"  goto Backup_Selected_Data
 if "%SPEEDOO_POS_choice%"=="2"  goto Backup_All_Data
-if "%Download_choice%"=="3" goto SQL_Server
+if "%SPEEDOO_POS_choice%"=="3"  goto Befor_Format
+if "%Download_choice%"=="4" goto SQL_Server
 if "%Download_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
@@ -718,7 +723,55 @@ echo Backup Successful in folder %BACKUP_DIR%
 pause
 goto Main_Menu
 
+@REM -------------------------> Befor_Format <----------------------------- 
+:Befor_Format
+set Befor_Format_Path=%BACKUP_DIR%/Befor_Format
+@REM -------------------------> Backup Data
+:Befor_Format_Backup
+set Befor_Format_Backup_Path=%BACKUP_DIR%/Befor_Format/Backup
+echo Backup is start .....
+ sqlcmd %SQL_Connecction% -Q "DECLARE @name NVARCHAR(256); DECLARE @backupFile NVARCHAR(256); DECLARE @sql NVARCHAR(MAX); DECLARE @backupDir NVARCHAR(256); SET @backupDir = '%Befor_Format_Backup_Path%'; DECLARE db_cursor CURSOR FOR SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'model', 'msdb', 'tempdb'); OPEN db_cursor; FETCH NEXT FROM db_cursor INTO @name; WHILE @@FETCH_STATUS = 0 BEGIN; SET @backupFile = @backupDir + '\' + @name + CONVERT(VARCHAR, GETDATE(), 112) + '_' + REPLACE(CONVERT(VARCHAR, GETDATE(), 108), ':', '-') + '.bak'; SET @sql = 'BACKUP DATABASE [' + @name + '] TO DISK = ''' + @backupFile + ''' WITH NOFORMAT, NOINIT, NAME = ''' + @name + '-Full Database Backup'', SKIP, NOREWIND, NOUNLOAD, STATS = 10'; EXEC sp_executesql @sql; FETCH NEXT FROM db_cursor INTO @name; END; CLOSE db_cursor; DEALLOCATE db_cursor;"
+if not exist "%Befor_Format_Backup_Path%" (
+    cls
+    mkdir "%Befor_Format_Backup_Path%"
+    echo Folder created: %Befor_Format_Backup_Path%
+    goto Befor_Format_Backup
+) 
+@REM -------------------------> Copy Mysetting Speedoo to file 
+if "%DB_NAME_choice%" == "2" (
+    set Shortcut_File=SPEEDOO REST.lnk
+    set MySettingName=MySettingRESTAURANT
+    
+) else (
+    set Shortcut_File=SPEEDOO POS.lnk
+    set MySettingName=MySettingSPEEDOO
+)
 
+set "TargetPath="
+for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('C:\\Users\\%USERNAME%\\Desktop\\%Shortcut_File%').TargetPath"') do set "TargetPath=%%A"
+
+if "%TargetPath%"=="" (
+    echo Shortcut not found or target path could not be determined.
+    exit /b
+)
+set "TargetDir=%TargetPath%\.."
+mkdir "%Befor_Format_Path%\%MySettingName%"
+robocopy "%TargetDir%\%MySettingName%" "%Befor_Format_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB 
+@REM -------------------------> Copy mdf to file 
+net stop MSSQL$SALES_DEV
+mkdir "%Befor_Format_Path%\MDF"
+robocopy "C:\Program Files (x86)\Microsoft SQL Server\MSSQL11.SALES_DEV\MSSQL\DATA" "%Befor_Format_Path%\MDF" /E /COPYALL /R:0 /W:0 /V /ZB 
+net start MSSQL$SALES_DEV
+@REM -------------------------> Copy Serial to file 
+if "%DB_NAME_choice%" == "2" (
+  set Serial_File=SERIAL SPEEDOO REST.txt
+) else (
+    set Serial_File=SERIAL SPEEDOO.txt
+) 
+copy "C:\Users\%USERNAME%\Documents\%Serial_File%" "%Befor_Format_Path%\%Serial_File%" /Y
+echo Backup Successful in %Befor_Format_Path%
+pause
+goto Main_Menu
 @REM -------------------------> Start_Download <----------------------------- 
 :Start_Download
 curl -L --progress-bar --retry 5 --retry-delay 10 -C - -o %output% %url%
