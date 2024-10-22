@@ -87,6 +87,8 @@ set Windows_Activity_URL="https://edef12.pcloud.com/cfZE5eKE9ZyA5gkcZya0SZZVedgk
 set Windows_Activity_FILE= "%Download_Path%\KMSAutoNet.rar"
 set Winrar_URL="https://www.rarlab.com/rar/winrar-x64-701ar.exe"
 set Winrar_FILE="%Download_Path%\winrar-x64-701ar.exe"
+set VPN_URL="https://fl-downloads.digitaltrends.com/f2c/449/30f067664fbd1f502e967afe7c7f8d66b7/1111_w_WARP_V2024.2.187.0.msi?Expires=1729621442&Signature=bfc5eee981814da97b5cfc7641a6e589139d05bc&url=https://downloads.digitaltrends.com/1111-w-warp/windows&Filename=1111_w_WARP_V2024.2.187.0.msi"
+set VPN_FILE="%Download_Path%\WARP_1.1.1_VPN.msi"
 @REM -------------------------> Printers Info
 @REM -----------> Canon_6030 Url
 set Canon_6030_Url="https://www.dropbox.com/scl/fi/m2tznhch5h3q3t9c1aeti/LBP6030_V2111_WP_EN.exe?rlkey=3moh1m0vvk05bres72ygpglrc&st=s0km86rh&dl=0"
@@ -370,7 +372,9 @@ echo                     1. dControl                      2. Windows Ubdate Cont
 echo.
 echo                     3. Windows Activity              4. Winrar                
 echo.
-echo                     5. GO Back                       0. Exit                
+echo                     5. 1.1.1.1 VPN                   6. GO Back     
+echo.
+echo                     0. Exit             
 echo.
 echo                  -------------------------------------------------------------
 echo.
@@ -379,7 +383,8 @@ if "%SQL_choice%"=="1" set url= %dControl_URL%& set output=%dControl_FILE%& goto
 if "%SQL_choice%"=="2" set url= %WUB_URL%& set output=%WUB_FILE%& goto Start_Download
 if "%SQL_choice%"=="3" set url= %Windows_Activity_URL%& set output=%Windows_Activity_FILE%& goto Start_Download
 if "%SQL_choice%"=="4" set url=%Winrar_URL%& set output= %Winrar_FILE%& goto Start_Download
-if "%Download_choice%"=="5" goto SPEEDOO_POS_Download
+if "%SQL_choice%"=="5" set url=%VPN_URL%& set output= %VPN_FILE%& goto Start_Download
+if "%Download_choice%"=="6" goto SPEEDOO_POS_Download
 if "%Download_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
@@ -776,13 +781,13 @@ goto Main_Menu
 @REM -------------------------> Befor_Updatet <----------------------------- 
 :Befor_Update
 set Befor_Update_Path=%BACKUP_DIR%/Befor_Update
-REM ------------Set Firewall off---------
+REM ------------Set Firewall off
 netsh advfirewall set publicprofile state off
 netsh advfirewall set currentprofile state off
 netsh advfirewall set domainprofile state off
 netsh advfirewall set allprofiles state off
 netsh advfirewall set privateprofile state off
-REM ------------------stop windefend-----------------
+REM ------------------stop windefend
 net stop windefend
 Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
 @REM -------------------------> Backup Data
