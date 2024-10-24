@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 0.6
+title IRAQSOFT SUPPORT TOOLS V 0.7
 chcp 65001  >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -755,12 +755,13 @@ if "%DB_NAME_choice%" == "2" (
 
 set "TargetPath="
 for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('C:\\Users\\%USERNAME%\\Desktop\\%Shortcut_File%').TargetPath"') do set "TargetPath=%%A"
-
-if "%TargetPath%"=="" (
-    echo Shortcut not found or target path could not be determined.
-    exit /b
-)
 set "TargetDir=%TargetPath%\.."
+if "%TargetPath%"=="" (
+    cls
+    echo Can not find the path of %Shortcut_File%
+    set /p TargetPath="Type the path of Speedoo file location: "
+)
+
 mkdir "%Befor_Format_Path%\%MySettingName%"
 robocopy "%TargetDir%\%MySettingName%" "%Befor_Format_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB 
 @REM -------------------------> Copy mdf to file 
@@ -802,6 +803,7 @@ if not exist "%Befor_Update_Backup_Path%" (
     goto Befor_Update_Backup
 ) 
 @REM -------------------------> Copy Mysetting Speedoo to file 
+SET /P 
 if "%DB_NAME_choice%" == "2" (
     set Shortcut_File=SPEEDOO REST.lnk
     set MySettingName=MySettingRESTAURANT
@@ -813,12 +815,13 @@ if "%DB_NAME_choice%" == "2" (
 
 set "TargetPath="
 for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('C:\\Users\\%USERNAME%\\Desktop\\%Shortcut_File%').TargetPath"') do set "TargetPath=%%A"
-
-if "%TargetPath%"=="" (
-    echo Shortcut not found or target path could not be determined.
-    exit /b
-)
 set "TargetDir=%TargetPath%\.."
+if "%TargetPath%"=="" (
+    cls
+    echo Can not find the path of %Shortcut_File%
+    set /p TargetPath="Type the path of Speedoo file location: "
+)
+
 mkdir "%Befor_Update_Path%\%MySettingName%"
 robocopy "%TargetDir%\%MySettingName%" "%Befor_Update_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB 
 pause
