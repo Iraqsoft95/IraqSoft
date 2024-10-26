@@ -756,7 +756,7 @@ if "%DB_NAME_choice%" == "2" (
 set "TargetPath="
 for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('C:\\Users\\%USERNAME%\\Desktop\\%Shortcut_File%').TargetPath"') do set "TargetPath=%%A"
 set "TargetDir=%TargetPath%\.."
-if "%TargetPath%"=="" (
+if "%TargetDir%"=="" (
     cls
     echo Can not find the path of %Shortcut_File%
     set /p TargetPath="Type the path of Speedoo file location: "
@@ -819,7 +819,7 @@ set "TargetDir=%TargetPath%\.."
 if "%TargetPath%"=="" (
     cls
     echo Can not find the path of %Shortcut_File%
-    set /p TargetPath="Type the path of Speedoo file location: "
+    set /p TargetDir="Type the path of Speedoo file location: "
 )
 
 mkdir "%Befor_Update_Path%\%MySettingName%"
