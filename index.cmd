@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 0.7
+title IRAQSOFT SUPPORT TOOLS V 0.8
 chcp 65001  >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -216,8 +216,8 @@ set /p SPEEDOO_POS_choice="Please choose an option : "
 if "%SPEEDOO_POS_choice%"=="1" set url= %SPEEDOO_POS_FULL_URL%& set output=%SPEEDOO_POS_FULL_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="2" set url= %SPEEDOO_POS_UPDATE_URL%& set output=%SPEEDOO_POS_UPDATE_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="3" set url= %SPEEDOO_POS_CLINT_URL%& set output=%SPEEDOO_POS_CLINT_FILE%& goto Start_Download
-if "%Download_choice%"=="4" goto SPEEDOO_POS_Download
-if "%Download_choice%"=="0" goto Exit
+if "%SPEEDOO_POS_choice%"=="4" goto Downloads
+if "%SPEEDOO_POS_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto SPEEDOO_POS_Download
@@ -242,8 +242,8 @@ set /p SPEEDOO_POS_choice="Please choose an option : "
 if "%SPEEDOO_POS_choice%"=="1" set url= %SPEEDOO_REST_FULL_URL%& set output=%SPEEDOO_REST_FULL_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="2" set url= %SPEEDOO_REST_UPDATE_URL%& set output=%SPEEDOO_REST_UPDATE_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="3" set url= %SPEEDOO_REST_CLINT_URL%& set output=%SPEEDOO_REST_CLINT_FILE%& goto Start_Download
-if "%Download_choice%"=="4" goto SPEEDOO_POS_Download
-if "%Download_choice%"=="0" goto Exit
+if "%SPEEDOO_POS_choice%"=="4" goto Downloads
+if "%SPEEDOO_POS_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto SPEEDOO_REST_Download
@@ -265,8 +265,8 @@ echo.
 set /p Point_Pos_choice="Please choose an option : "
 if "%Point_POS_choice%"=="1" set url= %Point_Pos_FULL_URL%& set output=%Point_Pos_FULL_FILE%& goto Start_Download
 if "%Point_POS_choice%"=="2" set url= %Point_Pos_UPDATE_URL%& set output=%Point_Pos_UPDATE_FILE%& goto Start_Download
-if "%Download_choice%"=="3" goto SPEEDOO_POS_Download
-if "%Download_choice%"=="0" goto Exit
+if "%Point_POS_choice%"=="3" goto Downloads
+if "%Point_POS_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Point_Pos_Download
@@ -291,8 +291,8 @@ set /p SPEEDOO_POS_choice="Please choose an option : "
 if "%SPEEDOO_POS_choice%"=="1" set url= %Point_Super_FULL_URL%& set output=%Point_Super_FULL_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="2" set url= %Point_Super_UPDATE_URL%& set output=%Point_Super_UPDATE_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="3" set url= %Point_Super_CLINT_URL%& set output=%Point_Super_CLINT_FILE%& goto Start_Download
-if "%Download_choice%"=="4" goto SPEEDOO_POS_Download
-if "%Download_choice%"=="0" goto Exit
+if "%SPEEDOO_POS_choice%"=="4" goto Downloads
+if "%SPEEDOO_POS_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Point_Super_Download
@@ -322,8 +322,8 @@ if "%Shipping Plus_choice%"=="2" set url= %Shipping_Plus_2.2.0.0_UPDATE_URL%& se
 if "%Shipping Plus_choice%"=="3" set url= %Shipping_Plus_2.2.0.0_CLINT_URL%& set output=%Shipping_Plus_2.2.0.0_CLINT_FILE%& goto Start_Download
 if "%Shipping Plus_choice%"=="4" set url= %Shipping_Plus_2.2.2.2_FULL_URL%& set output=%Shipping_Plus_2.2.2.2_FULL_FILE%& goto Start_Download
 if "%Shipping Plus_choice%"=="5" set url= %Shipping_Plus_2.2.2.2_UPDATE_URL%& set output=%Shipping_Plus_2.2.2.2_UPDATE_FILE%& goto Start_Download
-if "%Download_choice%"=="6" goto SPEEDOO_POS_Download
-if "%Download_choice%"=="0" goto Exit
+if "%Shipping Plus_choice%"=="6" goto Downloads
+if "%Shipping Plus_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Shipping_Plus_Download
@@ -350,8 +350,8 @@ if "%SQL_choice%"=="1" set url= %Sql_2008_URL%& set output=%Sql_2008_FILE%& goto
 if "%SQL_choice%"=="2" set url= %Sql_2012_URL%& set output=%Sql_2012_FILE%& goto Start_Download
 if "%SQL_choice%"=="3" set url= %Sql_2014_URL%& set output=%Sql_2014_FILE%& goto Start_Download
 if "%SQL_choice%"=="4" set url= %Sql_2019_URL%& set output=%Sql_2019_FILE%& goto Start_Download
-if "%Download_choice%"=="5" goto SPEEDOO_POS_Download
-if "%Download_choice%"=="0" goto Exit
+if "%SQL_choice%"=="5" goto Downloads
+if "%SQL_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto SQL_Download
@@ -384,8 +384,8 @@ if "%SQL_choice%"=="2" set url= %WUB_URL%& set output=%WUB_FILE%& goto Start_Dow
 if "%SQL_choice%"=="3" set url= %Windows_Activity_URL%& set output=%Windows_Activity_FILE%& goto Start_Download
 if "%SQL_choice%"=="4" set url=%Winrar_URL%& set output= %Winrar_FILE%& goto Start_Download
 if "%SQL_choice%"=="5" set url=%VPN_URL%& set output= %VPN_FILE%& goto Start_Download
-if "%Download_choice%"=="6" goto SPEEDOO_POS_Download
-if "%Download_choice%"=="0" goto Exit
+if "%SQL_choice%"=="6" goto Downloads
+if "%SQL_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Service_Programs_Download
@@ -423,8 +423,8 @@ if "%choice%"=="7" set url=%ZJ_Url%& set output=%ZJ_File%& goto Start_Download
 if "%choice%"=="8" set url=%xpriner_Url%& set output=%xpriner_File%& goto Start_Download
 if "%choice%"=="9" set url=%HPRT_Url%& set output=%HPRT_File%& goto Start_Download
 if "%choice%"=="10" set url=%Printer_Tool_Url%& set output=%Printer_Tool_File%& goto Start_Download
-if "%Download_choice%"=="11" goto Main_Menu
-if "%Download_choice%"=="0" goto Exit
+if "%choice%"=="11" goto Main_Menu
+if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Printers
@@ -450,8 +450,8 @@ set /p DB_NAME_choice="choose Yor Databases Name: "
 if "%DB_NAME_choice%"=="1"   set DB_NAME=SPEEDOO_DB & goto SQL_Server_List
 if "%DB_NAME_choice%"=="2"   set DB_NAME=RESTAURANT_DB & goto SQL_Server_List
 if "%DB_NAME_choice%"=="3"  goto Other_DB_Name
-if "%Download_choice%"=="4" goto Main_Menu
-if "%Download_choice%"=="0" goto Exit
+if "%DB_NAME_choice%"=="4" goto Main_Menu
+if "%DB_NAME_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto SQL_Server 
@@ -480,8 +480,8 @@ set /p choice="Please choose an option : "
 if "%choice%"=="1"  goto Telgram 
 if "%choice%"=="2"  goto Users_Edite 
 if "%choice%"=="3"  goto Backup
-if "%Download_choice%"=="4" goto Main_Menu
-if "%Download_choice%"=="0" goto Exit
+if "%choice%"=="4" goto Main_Menu
+if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto SQL_Server_List
@@ -503,8 +503,8 @@ echo.
 set /p SPEEDOO_POS_choice="Please choose an option : "
 if "%SPEEDOO_POS_choice%"=="1"  goto Add_Chat_Id
 if "%SPEEDOO_POS_choice%"=="2"  goto Telegram_Disable
-if "%Download_choice%"=="3" goto SQL_Server
-if "%Download_choice%"=="0" goto Exit
+if "%SPEEDOO_POS_choice%"=="3" goto SQL_Server
+if "%SPEEDOO_POS_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Telegram
@@ -546,8 +546,8 @@ echo.
 set /p Telegram_Disable_choice="choose Yor Entrenet Conection : "
 if "%Telegram_Disable_choice%"=="1"   set dnsservers="Wi-Fi"& goto Start_Telegram_Disable
 if "%Telegram_Disable_choice%"=="2"   set dnsservers="Ethernet"& goto Start_Telegram_Disable
-if "%Download_choice%"=="3" goto SQL_Server_List
-if "%Download_choice%"=="0" goto Exit
+if "%Telegram_Disable_choice%"=="3" goto SQL_Server_List
+if "%Telegram_Disable_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Telegram_Disable
@@ -583,8 +583,8 @@ if "%choice%"=="1"  goto Add_User
 if "%choice%"=="2"  goto Change_Pass_To_Defulte
 if "%choice%"=="3"  goto Delet_User
 if "%choice%"=="4"  goto Delet_All_User
-if "%Download_choice%"=="5" goto Main_Menu
-if "%Download_choice%"=="0" goto Exit
+if "%choice%"=="5" goto Main_Menu
+if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Users_Edite 
@@ -674,8 +674,8 @@ if "%SPEEDOO_POS_choice%"=="1"  goto Backup_Selected_Data
 if "%SPEEDOO_POS_choice%"=="2"  goto Backup_All_Data
 if "%SPEEDOO_POS_choice%"=="3"  goto Befor_Format
 if "%SPEEDOO_POS_choice%"=="4"  goto Befor_Update
-if "%Download_choice%"=="5" goto SQL_Server
-if "%Download_choice%"=="0" goto Exit
+if "%SPEEDOO_POS_choice%"=="5" goto SQL_Server
+if "%SPEEDOO_POS_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Backup 
@@ -745,25 +745,37 @@ if not exist "%Befor_Format_Backup_Path%" (
 ) 
 @REM -------------------------> Copy Mysetting Speedoo to file 
 if "%DB_NAME_choice%" == "2" (
-    set Shortcut_File=SPEEDOO REST.lnk
-    set MySettingName=MySettingRESTAURANT
-    
+    set "Shortcut_File=SPEEDOO REST.lnk"
+    set "MySettingName=MySettingRESTAURANT"
 ) else (
-    set Shortcut_File=SPEEDOO POS.lnk
-    set MySettingName=MySettingSPEEDOO
+    set "Shortcut_File=SPEEDOO POS.lnk"
+    set "MySettingName=MySettingSPEEDOO"
 )
 
 set "TargetPath="
-for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('C:\\Users\\%USERNAME%\\Desktop\\%Shortcut_File%').TargetPath"') do set "TargetPath=%%A"
-set "TargetDir=%TargetPath%\.."
-if "%TargetDir%"=="" (
-    cls
-    echo Can not find the path of %Shortcut_File%
-    set /p TargetPath="Type the path of Speedoo file location: "
+set "UserDesktopPath=C:\Users\%USERNAME%\Desktop\%Shortcut_File%"
+set "PublicDesktopPath=C:\Users\Public\Desktop\%Shortcut_File%"
+
+@REM check if shortcut in user desktop
+if exist "%UserDesktopPath%" (
+    for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%UserDesktopPath%').TargetPath"') do set "TargetPath=%%A"
 )
 
+@REM check if shortcut in public desktop
+if not defined TargetPath if exist "%PublicDesktopPath%" (
+    for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%PublicDesktopPath%').TargetPath"') do set "TargetPath=%%A"
+)
+
+@REM check if not defined
+if not defined TargetPath (
+    cls
+    echo Could not find the shortcut for %Shortcut_File% on either User or Public Desktop.
+    set /p TargetPath="Please type the path of Speedoo file location: "
+)
+set "TargetDir=%TargetPath%\.."
 mkdir "%Befor_Format_Path%\%MySettingName%"
-robocopy "%TargetDir%\%MySettingName%" "%Befor_Format_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB 
+robocopy "%TargetDir%\%MySettingName%" "%Befor_Format_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB
+
 @REM -------------------------> Copy mdf to file 
 net stop MSSQL$SALES_DEV
 mkdir "%Befor_Format_Path%\MDF"
@@ -803,29 +815,51 @@ if not exist "%Befor_Update_Backup_Path%" (
     goto Befor_Update_Backup
 ) 
 @REM -------------------------> Copy Mysetting Speedoo to file 
-SET /P 
 if "%DB_NAME_choice%" == "2" (
-    set Shortcut_File=SPEEDOO REST.lnk
-    set MySettingName=MySettingRESTAURANT
-    
+    set "Shortcut_File=SPEEDOO REST.lnk"
+    set "MySettingName=MySettingRESTAURANT"
 ) else (
-    set Shortcut_File=SPEEDOO POS.lnk
-    set MySettingName=MySettingSPEEDOO
+    set "Shortcut_File=SPEEDOO POS.lnk"
+    set "MySettingName=MySettingSPEEDOO"
 )
 
 set "TargetPath="
-for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('C:\\Users\\%USERNAME%\\Desktop\\%Shortcut_File%').TargetPath"') do set "TargetPath=%%A"
-set "TargetDir=%TargetPath%\.."
-if "%TargetPath%"=="" (
-    cls
-    echo Can not find the path of %Shortcut_File%
-    set /p TargetDir="Type the path of Speedoo file location: "
+set "UserDesktopPath=C:\Users\%USERNAME%\Desktop\%Shortcut_File%"
+set "PublicDesktopPath=C:\Users\Public\Desktop\%Shortcut_File%"
+
+@REM check if shortcut in user desktop
+if exist "%UserDesktopPath%" (
+    for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%UserDesktopPath%').TargetPath"') do set "TargetPath=%%A"
 )
 
+@REM check if shortcut in public desktop
+if not defined TargetPath if exist "%PublicDesktopPath%" (
+    for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%PublicDesktopPath%').TargetPath"') do set "TargetPath=%%A"
+)
+
+@REM check if not defined
+if not defined TargetPath (
+    cls
+    echo Could not find the shortcut for %Shortcut_File% on either User or Public Desktop.
+    set /p TargetPath="Please type the path of Speedoo file location: "
+)
+set "TargetDir=%TargetPath%\.."
 mkdir "%Befor_Update_Path%\%MySettingName%"
-robocopy "%TargetDir%\%MySettingName%" "%Befor_Update_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB 
+robocopy "%TargetDir%\%MySettingName%" "%Befor_Update_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB
 pause
 goto Main_Menu
+
+@REM -------------------------> Solutions <----------------------------- 
+:Solutions
+echo Coming soon
+pause
+goto Main_Menu
+@REM -------------------------> Connections <----------------------------- 
+:Connections
+echo Coming soon
+pause
+goto Main_Menu
+
 @REM -------------------------> Start_Download <----------------------------- 
 :Start_Download
 curl -L --progress-bar --retry 5 --retry-delay 10 -C - -o %output% %url%
