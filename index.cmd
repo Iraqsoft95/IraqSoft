@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 0.8
+title IRAQSOFT SUPPORT TOOLS V 0.9
 chcp 65001  >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -756,17 +756,17 @@ set "TargetPath="
 set "UserDesktopPath=C:\Users\%USERNAME%\Desktop\%Shortcut_File%"
 set "PublicDesktopPath=C:\Users\Public\Desktop\%Shortcut_File%"
 
-@REM check if shortcut in user desktop
+@REM -------------------------> check if shortcut in user desktop
 if exist "%UserDesktopPath%" (
     for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%UserDesktopPath%').TargetPath"') do set "TargetPath=%%A"
 )
 
-@REM check if shortcut in public desktop
+@REM -------------------------> check if shortcut in public desktop
 if not defined TargetPath if exist "%PublicDesktopPath%" (
     for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%PublicDesktopPath%').TargetPath"') do set "TargetPath=%%A"
 )
 
-@REM check if not defined
+@REM -------------------------> check if not defined
 if not defined TargetPath (
     cls
     echo Could not find the shortcut for %Shortcut_File% on either User or Public Desktop.
@@ -827,17 +827,17 @@ set "TargetPath="
 set "UserDesktopPath=C:\Users\%USERNAME%\Desktop\%Shortcut_File%"
 set "PublicDesktopPath=C:\Users\Public\Desktop\%Shortcut_File%"
 
-@REM check if shortcut in user desktop
+@REM -------------------------> check if shortcut in user desktop
 if exist "%UserDesktopPath%" (
     for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%UserDesktopPath%').TargetPath"') do set "TargetPath=%%A"
 )
 
-@REM check if shortcut in public desktop
+@REM ------------------------->check if shortcut in public desktop
 if not defined TargetPath if exist "%PublicDesktopPath%" (
     for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%PublicDesktopPath%').TargetPath"') do set "TargetPath=%%A"
 )
 
-@REM check if not defined
+@REM -------------------------> check if not defined
 if not defined TargetPath (
     cls
     echo Could not find the shortcut for %Shortcut_File% on either User or Public Desktop.
@@ -848,10 +848,43 @@ mkdir "%Befor_Update_Path%\%MySettingName%"
 robocopy "%TargetDir%\%MySettingName%" "%Befor_Update_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB
 pause
 goto Main_Menu
-
 @REM -------------------------> Solutions <----------------------------- 
 :Solutions
-echo Coming soon
+cls
+echo.
+echo.
+echo                  -------------------------------------------------------------
+echo.                                          Solutions
+echo                  -------------------------------------------------------------
+echo.
+echo                     1. Date and Time               
+echo.
+echo                  -------------------------------------------------------------
+echo.
+set /p choice="Please choose an option : "
+if "%choice%"=="1" goto Date_and_Time
+echo Invalid choice! Please choose again.
+pause
+goto Solutions
+@REM -------------------------> Date_and_Time <----------------------------- 
+:Date_and_Time
+@REM ----------->restart window time service
+sc config w32time start= auto
+net stop w32time && net start w32time
+@REM ----------->start time server
+w32tm /config /manualpeerlist:"time.google.com" /syncfromflags:manual /reliable:YES /update
+@REM ----------->resync with time server
+w32tm /resync
+@REM ----------->check if time updated
+w32tm /query /status
+@REM -----------------set time zone Baghdad +3 
+tzutil /s "Arabic Standard Time"
+@REM ----------------- set the locale to "en-US" (United States)
+powershell -command "Set-ItemProperty -Path 'HKCU:\Control Panel\International\' -Name 'LocaleName' -Value 'en-US'"
+@REM ----------------- Set the short date format to yyyy/MM/dd
+powershell -command "Set-ItemProperty -Path 'HKCU:\Control Panel\International\' -Name 'sShortDate' -Value 'yyyy/MM/dd'"
+@REM ----------------- Set the long date format to a common US long format (optional)
+powershell -command "Set-ItemProperty -Path 'HKCU:\Control Panel\International\' -Name 'sLongDate' -Value 'dddd, MMMM dd, yyyy'"
 pause
 goto Main_Menu
 @REM -------------------------> Connections <----------------------------- 
