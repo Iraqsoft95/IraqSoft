@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 0.9
+title IRAQSOFT SUPPORT TOOLS V 1.0
 chcp 65001  >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -36,12 +36,12 @@ set SPEEDOO_POS_UPDATE_FILE= "%Download_Path%\SPEEDOO-POS-1.3.8.4-UPDATE.exe"
 set SPEEDOO_POS_CLINT_URL= "https://www.dropbox.com/scl/fi/cvh53cxfptgrbl4th9ybf/SPEEDOO-POS-1.3.8.4-CLIENTS.exe?rlkey=engqaag83qnl4584g8hey1e3f&e=1&dl=0"
 set SPEEDOO_POS_CLINT_FILE= "%Download_Path%\SPEEDOO-POS-1.3.8.4-CLIENTS.exe"
 @REM -----------> SPEEDOO REST 
-set SPEEDOO_REST_FULL_URL= "https://www.dropbox.com/scl/fi/dnyporwaojb1iysma0lk4/Speedoo-APP-3.0.5.7-FULL.exe?rlkey=b2rgp9yxvz2hn2cil5zv37she&st=1sulgbl7&dl=0"
-set SPEEDOO_REST_FULL_FILE= "%Download_Path%\Speedoo-APP-3.0.5.7-FULL.exe"
-set SPEEDOO_REST_UPDATE_URL= "https://www.dropbox.com/scl/fi/fsv5smyvtychtmqn3ncia/Speedoo-REST-3.0.5.7-CLIENTS.exe?rlkey=bg8zzdlkzl7g2h89367kljzg7&e=1&st=xiesetls&dl=0"
-set SPEEDOO_REST_UPDATE_FILE= "%Download_Path%\Speedoo-REST-3.0.5.7-CLIENTS.exe"
-set SPEEDOO_REST_CLINT_URL= "https://www.dropbox.com/scl/fi/39s6a36r0hzj7g8bgnbyd/Speedoo-REST-3.0.5.7-UPDATE.exe?rlkey=hv665vott91ebgngbxeu8mvt6&e=1&st=x78dtckx&dl=0"
-set SPEEDOO_REST_CLINT_FILE= "%Download_Path%\Speedoo-REST-3.0.5.7-UPDATE.exe"
+set SPEEDOO_REST_FULL_URL= "https://www.dropbox.com/scl/fi/vno6nyw138kqa0ggk8nxm/Speedoo-APP-3.0.6.2-FULL.exe?rlkey=3zvo1olsoferjnjmyvsjzaq0i&e=1&st=4bx98z5c&dl=0"
+set SPEEDOO_REST_FULL_FILE= "%Download_Path%\Speedoo-APP-3.0.6.2-FULL.exe"
+set SPEEDOO_REST_CLINT_UR= "https://www.dropbox.com/scl/fi/i1pia1g8bdvic74een1ep/Speedoo-REST-3.0.6.2-CLIENTS.exe?rlkey=j1lmoyp9cks7xnrbk6y6x7ym8&e=1&st=swtnyi22&dl=0"
+set SPEEDOO_REST_CLINT_FILE= "%Download_Path%\Speedoo-REST-3.0.6.2-CLIENTS.exe"
+set SPEEDOO_REST_UPDATE_URL= "https://www.dropbox.com/scl/fi/xgt3952eb4rhzvbf3bhem/Speedoo-REST-3.0.6.2-UPDATE.exe?rlkey=wsyraxw7cztzslvjkon7d2exr&e=1&st=3redgglo&dl=0"
+set SPEEDOO_REST_UPDATE_FILE= "%Download_Path%\Speedoo-REST-3.0.6.2-UPDATE.exe"
 @REM -----------> Point_Pos
 set Point_Pos_FULL_URL= "https://www.dropbox.com/s/ne3uk78dl3po1ak/IraqSoft_point%20_pos%203.9.2.exe?dl=0"
 set Point_Pos_FULL_FILE= "%Download_Path%\point_pos_03.9.2.exe"
@@ -230,9 +230,9 @@ echo                  ----------------------------------------------------------
 echo.                                         SPEEDOO REST
 echo                  -------------------------------------------------------------
 echo.
-echo                     1. 3.0.5.7 FULL               2. 3.0.5.7 UPDATE
+echo                     1. 3.0.6.2 FULL               2. 3.0.6.2 UPDATE
 echo.
-echo                     3. 3.0.5.7 CLIENTS            4. GO BACK  
+echo                     3. 3.0.6.2 CLIENTS            4. GO BACK  
 echo. 
 echo                     0. Exit              
 echo.
@@ -889,10 +889,135 @@ pause
 goto Main_Menu
 @REM -------------------------> Connections <----------------------------- 
 :Connections
-echo Coming soon
+cls
+echo.
+echo.                             
+echo                  -------------------------------------------------------------
+echo.                                           Connections   
+echo                  -------------------------------------------------------------
+echo.
+echo                     1. IP Address Edite      
+echo.
+echo                     5. GO BACK                      0. Exit 
+echo.                     
+echo                  -------------------------------------------------------------
+echo.
+set /p choice="Please choose an option : "
+if "%choice%"=="1"  goto IP_Address_Edite   
+if "%choice%"=="5" goto Main_Menu
+if "%choice%"=="0" goto Exit
+echo Invalid choice! Please choose again.
 pause
+goto Connections
+@REM -------------------------> IP_Address_Edite  <----------------------------- 
+:IP_Address_Edite 
+@REM -------------------------> select Connection  <----------------------------- 
+:select_Connection
+cls
+echo.
+echo                  -------------------------------------------------------------
+echo                                          select Connection   
+echo                  -------------------------------------------------------------
+echo.
+echo                     1. Wi-Fi                         2. Ethernet      
+echo.
+echo                     3. GO BACK                       0. Exit 
+echo.                     
+echo                  -------------------------------------------------------------
+echo.
+set /p choice_Connection="Please choose an option : "
+if "%choice_Connection%"=="1" set Adapter_Name="Wi-Fi"& goto Main_IP_Address_Edite
+if "%choice_Connection%"=="2" set Adapter_Name="Ethernet"& goto Main_IP_Address_Edite
+if "%choice_Connection%"=="3" goto IP_Address_Edite  
+if "%choice_Connection%"=="0" goto Exit
+echo Invalid choice! Please choose again.
+pause
+goto select_IP_Address_Edite
+@REM -------------------------> select Connection  <----------------------------- 
+:Main_IP_Address_Edite
+cls
+echo.
+echo.                             
+echo                  -------------------------------------------------------------
+echo.                                          IP Address Edite 
+echo                  -------------------------------------------------------------
+echo.
+echo                     1. Add IP Address               2.Delet All IP Address
+echo.
+echo                     3. Show All IP Address            
+echo.
+echo                     5. GO BACK                      0. Exit 
+echo.                     
+echo                  -------------------------------------------------------------
+echo.
+set /p choice="Please choose an option : "
+if "%choice%"=="1"  goto Add_IP_Address   
+if "%choice%"=="2"  goto Delet_All_IP_Address  
+if "%choice%"=="3"  goto Show_All_IP_Address  
+if "%choice%"=="5" goto IP_Address_Edite
+if "%choice%"=="0" goto Exit
+echo Invalid choice! Please choose again.
+pause
+goto Main_IP_Address_Edite
+@REM -------------------------> Add_IP_Address <----------------------------- 
+:Add_IP_Address
+@REM ------------------------->  Turn off firewall
+netsh advfirewall set allprofiles state off
+@REM ------------------------->  Add IP address
+set /p IP_Address="Enter the IP Address (last octet): 192.168."
+set /p Geteway="Enter the Gateway IP (last octet): 192.168."
+echo.
+echo Checking if the IP 192.168.%IP_Address% is present...
+ipconfig | findstr /i "192.168.%IP_Address%" > nul
+if %errorlevel% equ 0 (
+    echo The IP 192.168.%IP_Address% is already present on the system.
+    echo Setting it as the primary IP address...
+    netsh interface ipv4 set address name="%Adapter_Name%" static 192.168.%IP_Address% 255.255.255.0 192.168.%Geteway%
+    if %errorlevel% equ 0 (
+        echo Success: The IP 192.168.%IP_Address% has been set as the primary IP.
+    ) else (
+        echo Error: Failed to set the IP 192.168.%IP_Address% as the primary IP.
+    )
+) else (
+    echo The IP 192.168.%IP_Address% is NOT present on the system.
+    echo Adding it as a secondary IP address...
+    netsh interface ipv4 add address "%Adapter_Name%" 192.168.%IP_Address% 255.255.255.0 192.168.%Geteway%
+    if %errorlevel% equ 0 (
+        echo Success: The IP 192.168.%IP_Address% has been added successfully.
+    ) else (
+        echo Error: Failed to add the IP 192.168.%IP_Address%
+    ))
+@REM ------------------------->  Add DNS
+set "Primary_DNS=8.8.8.8"
+set "Secondary_DNS=8.8.4.4"
+@REM --------------> Check if the primary DNS server is already set
+for /f "tokens=2 delims=:" %%A in ('netsh interface ipv4 show dnsservers name^="%Adapter_Name%" ^| find "%Primary_DNS%"') do (
+    echo Primary DNS %Primary_DNS% is already set. Skipping setting DNS...
+    pause
+    goto :Secondary_DNS
+)
+@REM --------------> If the primary DNS server is not set, set it
+echo Setting primary DNS to %Primary_DNS%...
+netsh interface ipv4 set dnsservers name="%Adapter_Name%" static %Primary_DNS% primary
+:Secondary_DNS
+@REM -------------->  Check if the secondary DNS server is already set
+for /f "tokens=2 delims=:" %%A in ('netsh interface ipv4 show dnsservers name^="%Adapter_Name%" ^| find "%Secondary_DNS%"') do (
+    echo Secondary DNS %Secondary_DNS% is already set. Skipping setting DNS...
+    goto Main_Menu)
+@REM --------------> If the secondary DNS server is not set, add it
+echo Adding secondary DNS %Secondary_DNS%...
+netsh interface ipv4 add dnsservers name="%Adapter_Name%" %Secondary_DNS% index=2
+echo Add IP_Address 192.168.%IP_Address% Successful! 
 goto Main_Menu
-
+@REM -------------------------> Delet IP <----------------------------- 
+:Delet_All_IP_Address  
+netsh interface ipv4 set address name="%Adapter_Name%" source=dhcp 
+goto Main_Menu
+@REM -------------------------> Show_All_IP_Address   <----------------------------- 
+:Show_All_IP_Address  
+powershell -Command "Get-NetIPAddress | Where-Object {$_.InterfaceAlias -like '*%Adapter_Name%*' -and $_.AddressFamily -eq 'IPv4'} | Select-Object IPAddress, State | Out-File 'C:\IRAQSOFT_TOOL\ip_status.txt'"
+start "" "C:\IRAQSOFT_TOOL\ip_status.txt"
+goto Main_Menu
 @REM -------------------------> Start_Download <----------------------------- 
 :Start_Download
 curl -L --progress-bar --retry 5 --retry-delay 10 -C - -o %output% %url%
