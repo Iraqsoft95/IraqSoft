@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 1.0
+title IRAQSOFT SUPPORT TOOLS V 1.1
 chcp 65001  >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -745,33 +745,50 @@ if not exist "%Befor_Format_Backup_Path%" (
 ) 
 @REM -------------------------> Copy Mysetting Speedoo to file 
 if "%DB_NAME_choice%" == "2" (
-    set "Shortcut_File=SPEEDOO REST.lnk"
+    set "Shortcut_Part=SPEEDOO REST"
     set "MySettingName=MySettingRESTAURANT"
 ) else (
-    set "Shortcut_File=SPEEDOO POS.lnk"
+    set "Shortcut_Part=SPEEDOO POS"
     set "MySettingName=MySettingSPEEDOO"
 )
-
+:start_serch_Shortcut_Format
+set "UserDesktop=%USERPROFILE%\Desktop"
+set "PublicDesktop=C:\Users\Public\Desktop"
 set "TargetPath="
-set "UserDesktopPath=C:\Users\%USERNAME%\Desktop\%Shortcut_File%"
-set "PublicDesktopPath=C:\Users\Public\Desktop\%Shortcut_File%"
-
 @REM -------------------------> check if shortcut in user desktop
-if exist "%UserDesktopPath%" (
-    for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%UserDesktopPath%').TargetPath"') do set "TargetPath=%%A"
+for %%F in ("%UserDesktop%\%Shortcut_Part%*.lnk") do (
+    for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%%F').TargetPath"') do (
+        set "TargetPath=%%A"
+        goto found_shortcut_Format
+    )
 )
 
-@REM -------------------------> check if shortcut in public desktop
-if not defined TargetPath if exist "%PublicDesktopPath%" (
-    for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%PublicDesktopPath%').TargetPath"') do set "TargetPath=%%A"
+@REM -------------------------> Search on Public Desktop if not found on the User's Desktop
+if not defined TargetPath (
+    for %%F in ("%PublicDesktop%\%Shortcut_Part%*.lnk") do (
+        for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%%F').TargetPath"') do (
+            set "TargetPath=%%A"
+            goto found_shortcut_Format
+        )
+    )
 )
-
+@REM -------------------------> Prompt for path if shortcut is not found
+if not defined TargetPath (
+    if  "%DB_NAME_choice%" == "2" (
+    set "Shortcut_Part=RESTAURANT_APP"
+    goto start_serch_Shortcut
+    ) else (
+        set "Shortcut_Part=SPEEDOO_APP"
+    goto start_serch_Shortcut_Format
+    )
+    )
 @REM -------------------------> check if not defined
 if not defined TargetPath (
     cls
     echo Could not find the shortcut for %Shortcut_File% on either User or Public Desktop.
     set /p TargetPath="Please type the path of Speedoo file location: "
 )
+:found_shortcut_Format
 set "TargetDir=%TargetPath%\.."
 mkdir "%Befor_Format_Path%\%MySettingName%"
 robocopy "%TargetDir%\%MySettingName%" "%Befor_Format_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB
@@ -816,33 +833,50 @@ if not exist "%Befor_Update_Backup_Path%" (
 ) 
 @REM -------------------------> Copy Mysetting Speedoo to file 
 if "%DB_NAME_choice%" == "2" (
-    set "Shortcut_File=SPEEDOO REST.lnk"
+    set "Shortcut_Part=SPEEDOO REST"
     set "MySettingName=MySettingRESTAURANT"
 ) else (
-    set "Shortcut_File=SPEEDOO POS.lnk"
+    set "Shortcut_Part=SPEEDOO POS"
     set "MySettingName=MySettingSPEEDOO"
 )
-
+:start_serch_Shortcut_Update
+set "UserDesktop=%USERPROFILE%\Desktop"
+set "PublicDesktop=C:\Users\Public\Desktop"
 set "TargetPath="
-set "UserDesktopPath=C:\Users\%USERNAME%\Desktop\%Shortcut_File%"
-set "PublicDesktopPath=C:\Users\Public\Desktop\%Shortcut_File%"
-
 @REM -------------------------> check if shortcut in user desktop
-if exist "%UserDesktopPath%" (
-    for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%UserDesktopPath%').TargetPath"') do set "TargetPath=%%A"
+for %%F in ("%UserDesktop%\%Shortcut_Part%*.lnk") do (
+    for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%%F').TargetPath"') do (
+        set "TargetPath=%%A"
+        goto found_shortcut_Update
+    )
 )
 
-@REM ------------------------->check if shortcut in public desktop
-if not defined TargetPath if exist "%PublicDesktopPath%" (
-    for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%PublicDesktopPath%').TargetPath"') do set "TargetPath=%%A"
+@REM -------------------------> Search on Public Desktop if not found on the User's Desktop
+if not defined TargetPath (
+    for %%F in ("%PublicDesktop%\%Shortcut_Part%*.lnk") do (
+        for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%%F').TargetPath"') do (
+            set "TargetPath=%%A"
+            goto found_shortcut_Update
+        )
+    )
 )
-
+@REM -------------------------> Prompt for path if shortcut is not found
+if not defined TargetPath (
+    if  "%DB_NAME_choice%" == "2" (
+    set "Shortcut_Part=RESTAURANT_APP"
+    goto start_serch_Shortcut
+    ) else (
+        set "Shortcut_Part=SPEEDOO_APP"
+    goto start_serch_Shortcut_Update
+    )
+    )
 @REM -------------------------> check if not defined
 if not defined TargetPath (
     cls
     echo Could not find the shortcut for %Shortcut_File% on either User or Public Desktop.
     set /p TargetPath="Please type the path of Speedoo file location: "
 )
+:found_shortcut_Update
 set "TargetDir=%TargetPath%\.."
 mkdir "%Befor_Update_Path%\%MySettingName%"
 robocopy "%TargetDir%\%MySettingName%" "%Befor_Update_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB
@@ -857,12 +891,13 @@ echo                  ----------------------------------------------------------
 echo.                                          Solutions
 echo                  -------------------------------------------------------------
 echo.
-echo                     1. Date and Time               
+echo                     1. Date and Time                     2. Delet locale          
 echo.
 echo                  -------------------------------------------------------------
 echo.
 set /p choice="Please choose an option : "
 if "%choice%"=="1" goto Date_and_Time
+if "%choice%"=="2" goto Delet_locale 
 echo Invalid choice! Please choose again.
 pause
 goto Solutions
@@ -886,6 +921,10 @@ powershell -command "Set-ItemProperty -Path 'HKCU:\Control Panel\International\'
 @REM ----------------- Set the long date format to a common US long format (optional)
 powershell -command "Set-ItemProperty -Path 'HKCU:\Control Panel\International\' -Name 'sLongDate' -Value 'dddd, MMMM dd, yyyy'"
 pause
+goto Main_Menu
+@REM ------------------------->  Delet locale  <-------------------------
+:Delet_locale 
+@RD /S /Q "%userprofile%\AppData\Local\IRAQSOFT/"
 goto Main_Menu
 @REM -------------------------> Connections <----------------------------- 
 :Connections
@@ -994,7 +1033,7 @@ set "Secondary_DNS=8.8.4.4"
 for /f "tokens=2 delims=:" %%A in ('netsh interface ipv4 show dnsservers name^="%Adapter_Name%" ^| find "%Primary_DNS%"') do (
     echo Primary DNS %Primary_DNS% is already set. Skipping setting DNS...
     pause
-    goto :Secondary_DNS
+    goto Secondary_DNS
 )
 @REM --------------> If the primary DNS server is not set, set it
 echo Setting primary DNS to %Primary_DNS%...
