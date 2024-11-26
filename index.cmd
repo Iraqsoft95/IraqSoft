@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 1.1
+title IRAQSOFT SUPPORT TOOLS V 1.2
 chcp 65001  >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -893,11 +893,18 @@ echo                  ----------------------------------------------------------
 echo.
 echo                     1. Date and Time                     2. Delet locale          
 echo.
+echo                     3. New Setup
+echo.   
+echo                     5. GO BACK                           0. Exit 
+echo.        
 echo                  -------------------------------------------------------------
 echo.
 set /p choice="Please choose an option : "
 if "%choice%"=="1" goto Date_and_Time
 if "%choice%"=="2" goto Delet_locale 
+if "%choice%"=="3" goto New_Setup 
+if "%choice%"=="5" goto Main_Menu
+if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Solutions
@@ -925,6 +932,78 @@ goto Main_Menu
 @REM ------------------------->  Delet locale  <-------------------------
 :Delet_locale 
 @RD /S /Q "%userprofile%\AppData\Local\IRAQSOFT/"
+goto Main_Menu
+@REM ------------------------->  New_Setup  <-------------------------
+:New_Setup 
+REM -----------> Check system compatibility
+ver | find "10" >nul
+if %errorlevel% neq 0 (
+    echo [ERROR] This script is designed for Windows 10. Exiting...
+    pause
+    exit /b
+)
+echo [INFO] System compatibility verified.
+REM -----------> Disable Windows Firewall
+echo [INFO] Disabling Windows Firewall...
+netsh advfirewall set allprofiles state off >nul 2>&1
+if %errorlevel% == 0 (
+    echo [SUCCESS] Windows Firewall disabled successfully.
+) else (
+    echo [ERROR] Failed to disable Windows Firewall.
+)
+REM -----------> Stop Windows Defender
+echo [INFO] Stopping Windows Defender...
+net stop windefend >nul 2>&1
+if %errorlevel% == 0 (
+    echo [SUCCESS] Windows Defender service stopped.
+) else (
+    echo [ERROR] Failed to stop Windows Defender service.
+)
+echo [INFO] Disabling Windows Defender via registry...
+Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f >nul 2>&1
+if %errorlevel% == 0 (
+    echo [SUCCESS] Windows Defender disabled via registry.
+) else (
+    echo [ERROR] Failed to disable Windows Defender via registry.
+)
+REM -----------> Set time zone to Baghdad (UTC+3)
+echo [INFO] Setting time zone to Baghdad (UTC+3)...
+tzutil /s "Arabic Standard Time" >nul 2>&1
+if %errorlevel% == 0 (
+    echo [SUCCESS] Time zone set successfully.
+) else (
+    echo [ERROR] Failed to set time zone.
+)
+REM -----------> Set locale to en-US
+echo [INFO] Setting locale to en-US...
+powershell -command "Set-ItemProperty -Path 'HKCU:\Control Panel\International\' -Name 'LocaleName' -Value 'en-US'" >nul 2>&1
+if %errorlevel% == 0 (
+    echo [SUCCESS] Locale set to en-US.
+) else (
+    echo [ERROR] Failed to set locale.
+)
+REM -----------> Set short date format to yyyy/MM/dd
+echo [INFO] Setting short date format to yyyy/MM/dd...
+powershell -command "Set-ItemProperty -Path 'HKCU:\Control Panel\International\' -Name 'sShortDate' -Value 'yyyy/MM/dd'" >nul 2>&1
+if %errorlevel% == 0 (
+    echo [SUCCESS] Short date format set to yyyy/MM/dd.
+) else (
+    echo [ERROR] Failed to set short date format.
+)
+REM -----------> Set long date format to dddd, MMMM dd, yyyy
+echo [INFO] Setting long date format to dddd, MMMM dd, yyyy...
+powershell -command "Set-ItemProperty -Path 'HKCU:\Control Panel\International\' -Name 'sLongDate' -Value 'dddd, MMMM dd, yyyy'" >nul 2>&1
+if %errorlevel% == 0 (
+    echo [SUCCESS] Long date format set to dddd, MMMM dd, yyyy.
+) else (
+    echo [ERROR] Failed to set long date format.
+)
+REM -----------> Open Optional Features window for .NET Framework installation
+echo [INFO] Opening optional features window for .NET Framework installation...
+optionalfeatures
+REM -----------> End of script
+echo [INFO] Script execution completed.
+pause
 goto Main_Menu
 @REM -------------------------> Connections <----------------------------- 
 :Connections
