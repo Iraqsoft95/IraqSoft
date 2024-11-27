@@ -820,6 +820,7 @@ netsh advfirewall set privateprofile state off
 REM ------------------stop windefend
 net stop windefend
 Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
+Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f
 @REM -------------------------> Backup Data
 :Befor_Update_Backup
 set Befor_Update_Backup_Path=%Befor_Update_Path%/Backup
@@ -893,7 +894,7 @@ echo                  ----------------------------------------------------------
 echo.
 echo                     1. Date and Time                     2. Delet locale          
 echo.
-echo                     3. New Setup
+echo                     3. New Setup                         4. Stop windefend and Firewall
 echo.   
 echo                     5. GO BACK                           0. Exit 
 echo.        
@@ -903,6 +904,7 @@ set /p choice="Please choose an option : "
 if "%choice%"=="1" goto Date_and_Time
 if "%choice%"=="2" goto Delet_locale 
 if "%choice%"=="3" goto New_Setup 
+if "%choice%"=="4" goto Stop_windefend_and_Firewall
 if "%choice%"=="5" goto Main_Menu
 if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
@@ -961,6 +963,7 @@ if %errorlevel% == 0 (
 )
 echo [INFO] Disabling Windows Defender via registry...
 Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f >nul 2>&1
+Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f
 if %errorlevel% == 0 (
     echo [SUCCESS] Windows Defender disabled via registry.
 ) else (
@@ -1004,6 +1007,17 @@ optionalfeatures
 REM -----------> End of script
 echo [INFO] Script execution completed.
 pause
+goto Main_Menu
+@REM ------------------------->  Stop_windefend_and_Firewall <-------------------------
+:Stop_windefend_and_Firewall 
+net stop windefend
+netsh advfirewall set publicprofile state off
+netsh advfirewall set currentprofile state off
+netsh advfirewall set domainprofile state off
+netsh advfirewall set allprofiles state off
+netsh advfirewall set privateprofile state off
+Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f 
+Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f
 goto Main_Menu
 @REM -------------------------> Connections <----------------------------- 
 :Connections
@@ -1081,6 +1095,9 @@ goto Main_IP_Address_Edite
 :Add_IP_Address
 @REM ------------------------->  Turn off firewall
 netsh advfirewall set allprofiles state off
+net stop windefend
+Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
+Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f
 @REM ------------------------->  Add IP address
 set /p IP_Address="Enter the IP Address (last octet): 192.168."
 set /p Geteway="Enter the Gateway IP (last octet): 192.168."
