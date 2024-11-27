@@ -1018,6 +1018,7 @@ netsh advfirewall set allprofiles state off
 netsh advfirewall set privateprofile state off
 Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f 
 Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f
+pause
 goto Main_Menu
 @REM -------------------------> Connections <----------------------------- 
 :Connections
