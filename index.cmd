@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 1.2
+title IRAQSOFT SUPPORT TOOLS V 1.3
 chcp 65001  >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -896,8 +896,10 @@ echo                     1. Date and Time                     2. Delet locale
 echo.
 echo                     3. New Setup                         4. Stop windefend and Firewall
 echo.   
-echo                     5. GO BACK                           0. Exit 
+echo                     5. Side By Side                      6. GO BACK 
 echo.        
+echo                     0. Exit 
+echo.  
 echo                  -------------------------------------------------------------
 echo.
 set /p choice="Please choose an option : "
@@ -905,7 +907,8 @@ if "%choice%"=="1" goto Date_and_Time
 if "%choice%"=="2" goto Delet_locale 
 if "%choice%"=="3" goto New_Setup 
 if "%choice%"=="4" goto Stop_windefend_and_Firewall
-if "%choice%"=="5" goto Main_Menu
+if "%choice%"=="5" goto Side_By_Side
+if "%choice%"=="6" goto Main_Menu
 if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
@@ -1010,7 +1013,7 @@ pause
 goto Main_Menu
 @REM ------------------------->  Stop_windefend_and_Firewall <-------------------------
 :Stop_windefend_and_Firewall 
-net stop windefend
+
 netsh advfirewall set publicprofile state off
 netsh advfirewall set currentprofile state off
 netsh advfirewall set domainprofile state off
@@ -1018,8 +1021,80 @@ netsh advfirewall set allprofiles state off
 netsh advfirewall set privateprofile state off
 Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f 
 Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f
-pause
 goto Main_Menu
+@REM -------------------------> Side_By_Side <-------------------------
+:Side_By_Side
+set side_By_side_Files="C:\side_By_side_Files"
+if not exist %side_By_side_Files% (
+    mkdir %side_By_side_Files% )
+cls
+echo.
+echo.                             
+echo                  -------------------------------------------------------------
+echo.                                           App Name
+echo                  -------------------------------------------------------------
+echo.
+echo                     1. SPEEDOO POS                 2. SPEEDOO REST
+echo.                     
+echo                  -------------------------------------------------------------
+echo.
+set /p App_NAME_choice="Please choose an option : "
+if "%App_NAME_choice%"=="1" (
+    set "Shortcut_Part=SPEEDOO POS"
+    curl -o "%side_By_side_Files%/App.config" "https://raw.githubusercontent.com/Iraqsoft95/IraqSoft/refs/heads/main/SideBySide/App.config"
+    curl -o "%side_By_side_Files%/SPEEDOO_APP.exe.Config" "https://raw.githubusercontent.com/Iraqsoft95/IraqSoft/refs/heads/main/SideBySide/SPEEDOO_APP.exe.Config"
+)
+if "%App_NAME_choice%"=="2" (
+      set "Shortcut_Part=SPEEDOO REST"
+     curl -o "%side_By_side_Files%/RESTAURANT_APP.exe.Config" "https://raw.githubusercontent.com/Iraqsoft95/IraqSoft/refs/heads/main/SideBySide/RESTAURANT_APP.exe.Config"
+
+)
+:start_serch_Shortcut_sideByside
+set "UserDesktop=%USERPROFILE%\Desktop"
+set "PublicDesktop=C:\Users\Public\Desktop"
+set "TargetPath="
+@REM -------------------------> check if shortcut in user desktop
+for %%F in ("%UserDesktop%\%Shortcut_Part%*.lnk") do (
+    for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%%F').TargetPath"') do (
+        set "TargetPath=%%A"
+        goto found_shortcut_sideByside
+    )
+)
+
+@REM -------------------------> Search on Public Desktop if not found on the User's Desktop
+if not defined TargetPath (
+    for %%F in ("%PublicDesktop%\%Shortcut_Part%*.lnk") do (
+        for /f "delims=" %%A in ('powershell -command "(New-Object -ComObject WScript.Shell).CreateShortcut('%%F').TargetPath"') do (
+            set "TargetPath=%%A"
+            goto found_shortcut_sideByside
+        )
+    )
+)
+@REM -------------------------> Prompt for path if shortcut is not found
+if not defined TargetPath (
+    if  "%App_NAME_choice%" == "2" (
+    set "Shortcut_Part=RESTAURANT_APP"
+    goto start_serch_Shortcut_sideByside
+    ) else (
+        set "Shortcut_Part=SPEEDOO_APP"
+    goto start_serch_Shortcut_sideByside
+    )
+    )
+@REM -------------------------> check if not defined
+if not defined TargetPath (
+    cls
+    echo Could not find the shortcut for %Shortcut_File% on either User or Public Desktop.
+    set /p TargetPath="Please type the path of Speedoo file location: "
+)
+:found_shortcut_sideByside
+set "TargetDir=%TargetPath%\.."
+robocopy "%side_By_side_Files%" "%TargetDir%" /E /COPYALL /R:0 /W:0 /V /ZB
+rmdir /s /q "%userprofile%\AppData\Local\IRAQSOFT"
+start "" "%TargetPath%"
+pause   
+rmdir /s /q  %side_By_side_Files%
+goto Main_Menu
+
 @REM -------------------------> Connections <----------------------------- 
 :Connections
 cls
@@ -1160,7 +1235,7 @@ curl -L --progress-bar --retry 5 --retry-delay 10 -C - -o %output% %url%
 if %errorlevel% neq 0 (
     echo Download interrupted. Retrying...
     timeout /t 10
-    goto download
+    goto Start_Download
 )
 
 echo Download Complete. Waiting To Opening The File...
