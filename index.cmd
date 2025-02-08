@@ -1,6 +1,6 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 1.3
-chcp 65001  >nul 2>&1
+title IRAQSOFT SUPPORT TOOLS V 1.4
+chcp 65001 >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
 @REM ----------->check if file Run Us Admin
@@ -13,12 +13,14 @@ if "%isAdmin%" == "false" (
     exit /b
 )
 @REM -------------------------> Varibles <-----------------------------
-set "SCRIPT_PATH=%~dp0"
+set "UserDesktop=%USERPROFILE%\Desktop"
+set "PublicDesktop=C:\Users\Public\Desktop"
+set "PublicDocuments=C:\Users\Public\Documents"
+set "SCRIPT_PATH=%PublicDocuments%\IRAQSOFT_TOOL"
 set "SCRIPT_NAME=%~nx0"
 set SCRIPT_Loc="%SCRIPT_PATH%%SCRIPT_NAME%"
-if not exist "C:\IRAQSOFT_TOOL" (
-    mkdir "C:\IRAQSOFT_TOOL")
-set File_Loc="C:\IRAQSOFT_TOOL"
+if not exist "%SCRIPT_PATH%" (
+    mkdir %SCRIPT_PATH%)
 set PC_Name=%COMPUTERNAME%
 set Server_Name= .\SALES_DEV
 set SQL_Connecction= -S .\SALES_DEV  -U sa -P 12345
@@ -26,7 +28,6 @@ set SQLCMD="C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn
 set "Download_Path=%USERPROFILE%\Downloads"
 set BACKUP_DIR=C:\MyBackup
 set Befor_Format_Path=C:\Befor_Format
-
 @REM -------------------------> Downloads Info
 @REM ----------> SPEEDOO POS 
 set SPEEDOO_POS_FULL_URL="https://www.dropbox.com/scl/fi/inwa5nl2ua5hlm1blb7rf/SPEEDOO-POS-1.3.8.4-FULL.exe?rlkey=kpqtgcwg490kxqo01h0ygz746&e=1&dl=0"
@@ -456,8 +457,8 @@ echo Invalid choice! Please choose again.
 pause
 goto SQL_Server 
 :Other_DB_Name
-sqlcmd -S .\SALES_DEV  -U sa -P 12345  -Q "SELECT name FROM sys.databases" -s "|" -W -f 65001 -o C:\IRAQSOFT_TOOL\databases_list.txt
-start notepad C:\IRAQSOFT_TOOL\databases_list.txt
+sqlcmd -S .\SALES_DEV  -U sa -P 12345  -Q "SELECT name FROM sys.databases" -s "|" -W -f 65001 -o %SCRIPT_PATH%\databases_list.txt
+start notepad %SCRIPT_PATH%\databases_list.txt
 set /p DB_NAME="Type Yor Databases Name: "
 goto SQL_Server_List
 :SQL_Server_List
@@ -622,8 +623,8 @@ goto Main_Menu
 
 @REM -------------------------> Delet_User <-----------------------------
 :Delet_User
-sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "SELECT USER_CODE as ID, USER_NAME as Name, CASE WHEN IS_ENC = 1 THEN 'True' ELSE 'False' END as Enc  FROM T_USERS" -s "|" -W    -f 65001 -o C:\IRAQSOFT_TOOL\Users.txt 
-start notepad C:\IRAQSOFT_TOOL\Users.txt
+sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "SELECT USER_CODE as ID, USER_NAME as Name, CASE WHEN IS_ENC = 1 THEN 'True' ELSE 'False' END as Enc  FROM T_USERS" -s "|" -W    -f 65001 -o %SCRIPT_PATH%\Users.txt 
+start notepad %SCRIPT_PATH%\Users.txt
 set /p USER_CODE="Tye the User code to delete: "
 set /p answer="Enter the password to continue : "
 if /i "%answer%"=="%config%" (
@@ -1022,6 +1023,7 @@ netsh advfirewall set privateprofile state off
 Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f 
 Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f
 goto Main_Menu
+
 @REM -------------------------> Side_By_Side <-------------------------
 :Side_By_Side
 set side_By_side_Files="C:\side_By_side_Files"
@@ -1035,7 +1037,9 @@ echo.                                           App Name
 echo                  -------------------------------------------------------------
 echo.
 echo                     1. SPEEDOO POS                 2. SPEEDOO REST
-echo.                     
+echo.          
+echo                     3. Point POS                 
+echo.                
 echo                  -------------------------------------------------------------
 echo.
 set /p App_NAME_choice="Please choose an option : "
@@ -1048,6 +1052,11 @@ if "%App_NAME_choice%"=="2" (
       set "Shortcut_Part=SPEEDOO REST"
      curl -o "%side_By_side_Files%/RESTAURANT_APP.exe.Config" "https://raw.githubusercontent.com/Iraqsoft95/IraqSoft/refs/heads/main/SideBySide/RESTAURANT_APP.exe.Config"
 
+)
+if "%App_NAME_choice%"=="3" (
+      set "Shortcut_Part=Point"
+     curl -o "%side_By_side_Files%/POINT_OF_SALES.exe.Config" "https://raw.githubusercontent.com/Iraqsoft95/IraqSoft/refs/heads/main/SideBySide/Point_Pos/POINT_OF_SALES.exe.Config"
+    curl -o "%side_By_side_Files%/App.config" "https://raw.githubusercontent.com/Iraqsoft95/IraqSoft/refs/heads/main/SideBySide/Point_Pos/App.config"
 )
 :start_serch_Shortcut_sideByside
 set "UserDesktop=%USERPROFILE%\Desktop"
@@ -1075,8 +1084,11 @@ if not defined TargetPath (
     if  "%App_NAME_choice%" == "2" (
     set "Shortcut_Part=RESTAURANT_APP"
     goto start_serch_Shortcut_sideByside
-    ) else (
+    ) else if "%App_NAME_choice%" == "1" (
         set "Shortcut_Part=SPEEDOO_APP"
+    goto start_serch_Shortcut_sideByside
+    ) else if "%App_NAME_choice%" == "3" (
+        set "Shortcut_Part=POINT_OF_SALES"
     goto start_serch_Shortcut_sideByside
     )
     )
@@ -1089,9 +1101,8 @@ if not defined TargetPath (
 :found_shortcut_sideByside
 set "TargetDir=%TargetPath%\.."
 robocopy "%side_By_side_Files%" "%TargetDir%" /E /COPYALL /R:0 /W:0 /V /ZB
-rmdir /s /q "%userprofile%\AppData\Local\IRAQSOFT"
 start "" "%TargetPath%"
-pause   
+pause
 rmdir /s /q  %side_By_side_Files%
 goto Main_Menu
 
@@ -1226,8 +1237,8 @@ netsh interface ipv4 set address name="%Adapter_Name%" source=dhcp
 goto Main_Menu
 @REM -------------------------> Show_All_IP_Address   <----------------------------- 
 :Show_All_IP_Address  
-powershell -Command "Get-NetIPAddress | Where-Object {$_.InterfaceAlias -like '*%Adapter_Name%*' -and $_.AddressFamily -eq 'IPv4'} | Select-Object IPAddress, State | Out-File 'C:\IRAQSOFT_TOOL\ip_status.txt'"
-start "" "C:\IRAQSOFT_TOOL\ip_status.txt"
+powershell -Command "Get-NetIPAddress | Where-Object {$_.InterfaceAlias -like '*%Adapter_Name%*' -and $_.AddressFamily -eq 'IPv4'} | Select-Object IPAddress, State | Out-File '%SCRIPT_PATH%\ip_status.txt'"
+start "" "%SCRIPT_PATH%\ip_status.txt"
 goto Main_Menu
 @REM -------------------------> Start_Download <----------------------------- 
 :Start_Download
