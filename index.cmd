@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 1.4
+title IRAQSOFT SUPPORT TOOLS V 1.5
 chcp 65001 >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -396,6 +396,29 @@ cls
 echo.
 echo.                             
 echo                  -------------------------------------------------------------
+echo.                                         Printers 
+echo                  -------------------------------------------------------------
+echo.
+echo                     1. Download Printer                   2. Show Printers IP
+echo.
+echo                     3. GO Back                            0. Exit
+echo.
+echo                  -------------------------------------------------------------
+echo.
+set /p SQL_choice="Please choose an option : "
+if "%SQL_choice%"=="1" goto Download_Printer
+if "%SQL_choice%"=="2" goto Show_Printers_IP
+if "%SQL_choice%"=="6" goto Main_Menu
+if "%SQL_choice%"=="0" goto Exit
+echo Invalid choice! Please choose again.
+pause
+goto Printers
+@REM -------------------------> Download_Printer <----------------------------- 
+:Download_Printer
+cls
+echo.
+echo.                             
+echo                  -------------------------------------------------------------
 echo.                                            Printers   
 echo                  -------------------------------------------------------------
 echo.
@@ -424,11 +447,25 @@ if "%choice%"=="7" set url=%ZJ_Url%& set output=%ZJ_File%& goto Start_Download
 if "%choice%"=="8" set url=%xpriner_Url%& set output=%xpriner_File%& goto Start_Download
 if "%choice%"=="9" set url=%HPRT_Url%& set output=%HPRT_File%& goto Start_Download
 if "%choice%"=="10" set url=%Printer_Tool_Url%& set output=%Printer_Tool_File%& goto Start_Download
-if "%choice%"=="11" goto Main_Menu
+if "%choice%"=="11" goto Printers
 if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
-goto Printers
+goto Download_Printer
+@REM -------------------------> Show_Printers_IP <-----------------------------
+:Show_Printers_IP
+echo Retrieving printer names and ports...
+echo.
+@REM ----------->  Delete the old file if it exists
+if exist "%UserDesktop%\printers_ip.txt" del "%UserDesktop%\printers_ip.txt"
+@REM ----------->  Use PowerShell to fetch and format printer data
+powershell -Command "Get-WmiObject -Query 'SELECT Name, PortName FROM Win32_Printer' | Select-Object -Property Name, PortName | Export-Csv -Path '%UserDesktop%\printers_ip.txt' -NoTypeInformation"
+@REM ----------->  Open the final file
+start "" "%UserDesktop%\printers_ip.txt"
+echo Done! Check printers.txt for details.
+pause  
+goto Main_Menu
+
 @REM -------------------------> SQL_Server <-----------------------------
 @REM ----------->  Databases Name
 :SQL_Server
@@ -897,9 +934,9 @@ echo                     1. Date and Time                     2. Delet locale
 echo.
 echo                     3. New Setup                         4. Stop windefend and Firewall
 echo.   
-echo                     5. Side By Side                      6. GO BACK 
-echo.        
-echo                     0. Exit 
+echo                     5. Side By Side                      6. Active Windows and Office
+echo.   
+echo                     7. GO BACK                           0. Exit 
 echo.  
 echo                  -------------------------------------------------------------
 echo.
@@ -909,7 +946,8 @@ if "%choice%"=="2" goto Delet_locale
 if "%choice%"=="3" goto New_Setup 
 if "%choice%"=="4" goto Stop_windefend_and_Firewall
 if "%choice%"=="5" goto Side_By_Side
-if "%choice%"=="6" goto Main_Menu
+if "%choice%"=="6" goto Active_Windows_Office
+if "%choice%"=="7" goto Main_Menu
 if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
@@ -1105,7 +1143,10 @@ start "" "%TargetPath%"
 pause
 rmdir /s /q  %side_By_side_Files%
 goto Main_Menu
-
+@REM -------------------------> Active_Windows_Office <----------------------------- 
+:Active_Windows_Office
+powershell -ExecutionPolicy Bypass -NoProfile -Command "irm https://get.activated.win | iex"
+goto Main_Menu
 @REM -------------------------> Connections <----------------------------- 
 :Connections
 cls
