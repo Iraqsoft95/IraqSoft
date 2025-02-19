@@ -26,7 +26,7 @@ function CheckFile {
 
 CheckInternet
 
-$URL = "https://raw.githubusercontent.com/Iraqsoft95/IraqSoft/refs/heads/main/IRAQ_SOFT.ps1"
+$URL = "https://raw.githubusercontent.com/Iraqsoft95/IraqSoft/refs/heads/main/index.cmd"
 $FilePath = "$env:TEMP\IRAQ_SOFT.ps1"
 
 try {
