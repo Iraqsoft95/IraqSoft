@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 1.5
+title IRAQSOFT SUPPORT TOOLS V 1.6
 chcp 65001 >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -508,17 +508,18 @@ echo                  ----------------------------------------------------------
 echo.
 echo                     1. Telegram                           2. Users Edite               
 echo.
-echo                     3. Backup                             4. GO Back               
-echo.                 
-echo                                           0. Exit              
-echo. 
+echo                     3. Backup                             4. Delete Data               
+echo.              
+echo                     5. GO Back                            0. Exit              
+echo.                                                               
 echo                  -------------------------------------------------------------
 echo.
 set /p choice="Please choose an option : "
 if "%choice%"=="1"  goto Telgram 
 if "%choice%"=="2"  goto Users_Edite 
 if "%choice%"=="3"  goto Backup
-if "%choice%"=="4" goto Main_Menu
+if "%choice%"=="4" goto Delete_Data
+if "%choice%"=="5" goto Main_Menu
 if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
@@ -921,6 +922,62 @@ mkdir "%Befor_Update_Path%\%MySettingName%"
 robocopy "%TargetDir%\%MySettingName%" "%Befor_Update_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB
 pause
 goto Main_Menu
+@REM ------------------------->  Delete_Data <----------------------------- 
+:Delete_Data
+cls
+echo.
+echo.                             
+echo                  -------------------------------------------------------------
+echo.                                           Delete Data   
+echo                  -------------------------------------------------------------
+echo.
+echo                     1. All Data                  2. Data But Items
+echo.
+echo                     3. SALES                     4. Opening Balance                  
+echo.  
+echo                     5. SALES Between             6. GO BACK                   
+echo.                     
+echo                                        0. Exit 
+echo.  
+echo                  -------------------------------------------------------------
+echo.
+set /p Delete_Data_choice="Please choose an option : "
+if "%Delete_Data_choice%"=="1"  goto DEl_All_Data 
+if "%Delete_Data_choice%"=="2"  goto DEl_Data_But_Items
+if "%Delete_Data_choice%"=="3"  goto DEl_SALES 
+if "%Delete_Data_choice%"=="4"  goto DEl_Opening_Balance
+if "%Delete_Data_choice%"=="5"  goto DEl_SALES_Between
+if "%Delete_Data_choice%"=="6" goto SQL_Server
+if "%Delete_Data_choice%"=="0" goto Exit
+echo Invalid choice! Please choose again.
+pause
+goto Delete_Data
+@REM -------------------------> DEl_All_Data <----------------------------- 
+:DEl_All_Data 
+sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "DECLARE @return_value int, @SUBMIT_FLAG int; EXEC @return_value = [dbo].[P_DELETE_DATA] @SUBMIT_FLAG = @SUBMIT_FLAG OUTPUT; SELECT @SUBMIT_FLAG as '@SUBMIT_FLAG'; SELECT 'Return Value' = @return_value;"
+pause
+goto Main_Menu
+@REM -------------------------> DEl_Data_But_Items <----------------------------- 
+:DEl_Data_But_Items
+sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "DECLARE @return_value int, @SUBMIT_FLAG int; EXEC @return_value = [dbo].[P_DELETE_DATA_BUT_ITEMS] @SUBMIT_FLAG = @SUBMIT_FLAG OUTPUT; SELECT @SUBMIT_FLAG as '@SUBMIT_FLAG'; SELECT 'Return Value' = @return_value;"
+pause
+goto Main_Menu
+@REM -------------------------> DEl_SALES <----------------------------- 
+:DEl_SALES
+sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "DECLARE @return_value int, @SUBMIT_FLAG int; EXEC @return_value = [dbo].[P_DELETE_DATA_SALES] @SUBMIT_FLAG = @SUBMIT_FLAG OUTPUT; SELECT @SUBMIT_FLAG as '@SUBMIT_FLAG'; SELECT 'Return Value' = @return_value;"
+pause
+goto Main_Menu
+@REM -------------------------> DEl_Opening_Balance <----------------------------- 
+:DEl_Opening_Balance
+sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "UPDATE T_STORE_BOX SET ST_IN=0, ST_OUT=0 WHERE BILL_NUMBER=0; UPDATE T_BUY_DETAILS SET QTY=0, TOTAL=0, TOTAL_COST=0, QTY_IN=0, QTY_OUT=0, TOTAL_OUT=0 WHERE BILL_NUMBER=0;"
+pause
+@REM -------------------------> DEl_SALES_Between <----------------------------- 
+:DEl_SALES_Between
+set /p Bill_Start=Type the Number of the first Bill : 
+set /p Bill_End=Type the Number of the End Bill : 
+sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "SET QUOTED_IDENTIFIER ON; DELETE FROM T_TELE_SCH; DELETE FROM T_APP_INVOICE; DELETE FROM T_USER_ERROR; DELETE FROM T_SALES_DISCOUNT WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_IN_OUT WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_UNIT_FORM; DELETE FROM T_UNIT_FORM_INFO; DELETE FROM T_SALES WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_PATROL WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_DETAILS WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_TEMP WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_STORE_BOX WHERE B_CODE=2 AND BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_BOX WHERE B_CODE=2 AND BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%;"
+pause
+goto Main_Menu
 @REM -------------------------> Solutions <----------------------------- 
 :Solutions
 cls
@@ -936,7 +993,9 @@ echo                     3. New Setup                         4. Stop windefend 
 echo.   
 echo                     5. Side By Side                      6. Active Windows and Office
 echo.   
-echo                     7. GO BACK                           0. Exit 
+echo                     7. Open SQL Server Configuration Manager (RED BAG)  
+echo.   
+echo                     8. GO BACK                           0. Exit 
 echo.  
 echo                  -------------------------------------------------------------
 echo.
@@ -947,7 +1006,8 @@ if "%choice%"=="3" goto New_Setup
 if "%choice%"=="4" goto Stop_windefend_and_Firewall
 if "%choice%"=="5" goto Side_By_Side
 if "%choice%"=="6" goto Active_Windows_Office
-if "%choice%"=="7" goto Main_Menu
+if "%choice%"=="7" goto Open_Red_Bag
+if "%choice%"=="8" goto Main_Menu
 if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
@@ -1147,6 +1207,11 @@ goto Main_Menu
 :Active_Windows_Office
 powershell -ExecutionPolicy Bypass -NoProfile -Command "irm https://get.activated.win | iex"
 goto Main_Menu
+@REM -------------------------> Open_Red_Bag <----------------------------- 
+:Open_Red_Bag
+start "" "C:\Windows\SysWOW64\SQLServerManager11.msc"
+goto Main_Menu
+
 @REM -------------------------> Connections <----------------------------- 
 :Connections
 cls
