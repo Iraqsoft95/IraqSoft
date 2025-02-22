@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 1.6
+title IRAQSOFT SUPPORT TOOLS V 1.7
 chcp 65001 >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -1221,7 +1221,7 @@ echo                  ----------------------------------------------------------
 echo.                                           Connections   
 echo                  -------------------------------------------------------------
 echo.
-echo                     1. IP Address Edite      
+echo                     1. IP Address Edite             2. PC User Management
 echo.
 echo                     5. GO BACK                      0. Exit 
 echo.                     
@@ -1229,6 +1229,7 @@ echo                  ----------------------------------------------------------
 echo.
 set /p choice="Please choose an option : "
 if "%choice%"=="1"  goto IP_Address_Edite   
+if "%choice%"=="2"  goto PC_User_Management  
 if "%choice%"=="5" goto Main_Menu
 if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
@@ -1258,7 +1259,7 @@ if "%choice_Connection%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto select_IP_Address_Edite
-@REM -------------------------> select Connection  <----------------------------- 
+@REM -------------------------> Main_IP_Address_Edite  <----------------------------- 
 :Main_IP_Address_Edite
 cls
 echo.
@@ -1346,6 +1347,110 @@ goto Main_Menu
 powershell -Command "Get-NetIPAddress | Where-Object {$_.InterfaceAlias -like '*%Adapter_Name%*' -and $_.AddressFamily -eq 'IPv4'} | Select-Object IPAddress, State | Out-File '%SCRIPT_PATH%\ip_status.txt'"
 start "" "%SCRIPT_PATH%\ip_status.txt"
 goto Main_Menu
+
+@REM -------------------------> PC_User_Management <----------------------------- 
+:PC_User_Management
+cls
+echo.
+echo                  -------------------------------------------------------------
+echo.                                      PC User Management
+echo                  -------------------------------------------------------------
+echo.
+echo                     1. Add User                4. MODIFY_PASSWORD                  
+echo.
+echo                     2. DELETE_USER             5. Modify User Privileges      
+echo.
+echo                     3. MODIFY_USERNAME         6. Main_Menu 
+echo.
+echo                                        0.Exit 
+echo.
+echo                  -------------------------------------------------------------
+echo.
+set /p choice="Enter your choice: "
+if "%choice%"=="1" goto ADD_USER
+if "%choice%"=="2" goto DELETE_USER
+if "%choice%"=="3" goto MODIFY_USERNAME
+if "%choice%"=="4" goto MODIFY_PASSWORD
+if "%choice%"=="5" goto MODIFY_PRIVILEGES
+if "%choice%"=="6" goto Main_Menu
+if "%choice%"=="7" goto EXIT
+echo Invalid choice, please try again.
+pause
+goto Main_Menu
+@REM -------------------------> ADD_USER <----------------------------- 
+:ADD_USER
+cls
+echo Adding a new user...
+echo.
+set /p username="Enter username: "  
+set /p password="Enter password: " 
+net user %username% %password%  /add 
+echo User %username% has been created.
+pause
+goto Main_Menu
+@REM -------------------------> DELETE_USER <----------------------------- 
+:DELETE_USER
+cls
+net user 
+echo Deleting a user...
+echo.
+set /p deluser="Enter username to delete: "  
+echo Are you sure you want to delete user %deluser%? (Y/N)
+set /p confirm="> "  // Confirm deletion
+if /I "%confirm%"=="Y" (
+    net user %deluser% /delete 
+    echo User %deluser% has been deleted.
+) else (
+    echo Operation canceled.
+)
+pause
+goto Main_Menu
+@REM -------------------------> MODIFY_USERNAME <----------------------------- 
+:MODIFY_USERNAME
+cls
+net user 
+echo Modifying a username...
+echo.
+set /p oldname="Enter the current username: " 
+set /p newname="Enter the new username: "
+wmic useraccount where name='%oldname%' rename %newname%
+echo Username has been changed from %oldname% to %newname%.
+pause
+goto Main_Menu
+@REM -------------------------> MODIFY_PASSWORD <----------------------------- 
+:MODIFY_PASSWORD
+cls
+net user 
+echo Modifying a user's password...
+echo.
+set /p username="Enter username: " 
+set /p newpassword="Enter new password: "
+net user %username% %newpassword%
+echo Password for user %username% has been changed.
+pause
+goto Main_Menu
+@REM -------------------------> MODIFY_PRIVILEGES <----------------------------- 
+:MODIFY_PRIVILEGES
+cls
+net user 
+echo Modifying user privileges...
+echo.
+set /p username="Enter username: " 
+echo 1. Add to Administrators group
+echo 2. Remove from Administrators group
+set /p privchoice="Enter your choice (1 or 2): " 
+if "%privchoice%"=="1" (
+    net localgroup Administrators %username% /add 
+    echo User %username% has been added to the Administrators group.
+) else if "%privchoice%"=="2" (
+    net localgroup Administrators %username% /delete 
+    echo User %username% has been removed from the Administrators group.
+) else (
+    echo Invalid choice.
+)
+pause
+goto Main_Menu
+
 @REM -------------------------> Start_Download <----------------------------- 
 :Start_Download
 curl -L --progress-bar --retry 5 --retry-delay 10 -C - -o %output% %url%
