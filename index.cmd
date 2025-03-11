@@ -971,6 +971,7 @@ goto Main_Menu
 :DEl_Opening_Balance
 sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "UPDATE T_STORE_BOX SET ST_IN=0, ST_OUT=0 WHERE BILL_NUMBER=0; UPDATE T_BUY_DETAILS SET QTY=0, TOTAL=0, TOTAL_COST=0, QTY_IN=0, QTY_OUT=0, TOTAL_OUT=0 WHERE BILL_NUMBER=0;"
 pause
+goto Main_Menu
 @REM -------------------------> DEl_SALES_Between <----------------------------- 
 :DEl_SALES_Between
 set /p Bill_Start=Type the Number of the first Bill : 
