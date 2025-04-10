@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 1.7
+title IRAQSOFT SUPPORT TOOLS V 1.8
 chcp 65001 >nul 2>&1
 setlocal
 @REM -------------------------> Run Bat Us Admin <-----------------------------
@@ -510,8 +510,10 @@ echo                     1. Telegram                           2. Users Edite
 echo.
 echo                     3. Backup                             4. Delete Data               
 echo.              
-echo                     5. GO Back                            0. Exit              
-echo.                                                               
+echo                     5. Promise SA ENABLE BR               6. GO Back              
+echo.              
+echo                     0. Exit              
+echo.                                                       
 echo                  -------------------------------------------------------------
 echo.
 set /p choice="Please choose an option : "
@@ -519,7 +521,8 @@ if "%choice%"=="1"  goto Telgram
 if "%choice%"=="2"  goto Users_Edite 
 if "%choice%"=="3"  goto Backup
 if "%choice%"=="4" goto Delete_Data
-if "%choice%"=="5" goto Main_Menu
+if "%choice%"=="5" goto Promise_SA_ENABLE_BROKER
+if "%choice%"=="6" goto Main_Menu
 if "%choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
@@ -971,12 +974,18 @@ goto Main_Menu
 :DEl_Opening_Balance
 sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "UPDATE T_STORE_BOX SET ST_IN=0, ST_OUT=0 WHERE BILL_NUMBER=0; UPDATE T_BUY_DETAILS SET QTY=0, TOTAL=0, TOTAL_COST=0, QTY_IN=0, QTY_OUT=0, TOTAL_OUT=0 WHERE BILL_NUMBER=0;"
 pause
-goto Main_Menu
 @REM -------------------------> DEl_SALES_Between <----------------------------- 
 :DEl_SALES_Between
 set /p Bill_Start=Type the Number of the first Bill : 
 set /p Bill_End=Type the Number of the End Bill : 
 sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "SET QUOTED_IDENTIFIER ON; DELETE FROM T_TELE_SCH; DELETE FROM T_APP_INVOICE; DELETE FROM T_USER_ERROR; DELETE FROM T_SALES_DISCOUNT WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_IN_OUT WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_UNIT_FORM; DELETE FROM T_UNIT_FORM_INFO; DELETE FROM T_SALES WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_PATROL WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_DETAILS WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_TEMP WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_STORE_BOX WHERE B_CODE=2 AND BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_BOX WHERE B_CODE=2 AND BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%;"
+pause
+goto Main_Menu
+
+@REM -------------------------> Promise_SA_ENABLE_BROKER <----------------------------- 
+:Promise_SA_ENABLE_BROKER
+sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "EXEC sp_changedbowner sa; ALTER DATABASE %DB_NAME% SET RESTRICTED_USER;ALTER DATABASE %DB_NAME% SET ENABLE_BROKER;ALTER DATABASE %DB_NAME% SET Multi_User"
+echo Done
 pause
 goto Main_Menu
 @REM -------------------------> Solutions <----------------------------- 
@@ -1344,8 +1353,8 @@ goto Main_Menu
 netsh interface ipv4 set address name="%Adapter_Name%" source=dhcp 
 goto Main_Menu
 @REM -------------------------> Show_All_IP_Address   <----------------------------- 
-:Show_All_IP_Address  
-powershell -Command "Get-NetIPAddress | Where-Object {$_.InterfaceAlias -like '*%Adapter_Name%*' -and $_.AddressFamily -eq 'IPv4'} | Select-Object IPAddress, State | Out-File '%SCRIPT_PATH%\ip_status.txt'"
+:Show_All_IP_Address
+powershell -Command "$adapter = Get-NetAdapter -Name '*%Adapter_Name%*'; $ipConfig = Get-NetIPConfiguration -InterfaceIndex $adapter.ifIndex; $dhcpStatus = (Get-NetIPInterface -InterfaceIndex $adapter.ifIndex -AddressFamily IPv4).Dhcp; [PSCustomObject]@{ InterfaceAlias = $adapter.Name; IPv4Address = ($ipConfig.IPv4Address | ForEach-Object { $_.IPAddress }) -join ', '; DefaultGateway = ($ipConfig.IPv4DefaultGateway | ForEach-Object { $_.NextHop }) -join ', '; DHCPStatus = $dhcpStatus } | Out-File '%SCRIPT_PATH%\ip_status.txt'"
 start "" "%SCRIPT_PATH%\ip_status.txt"
 goto Main_Menu
 
@@ -1469,3 +1478,5 @@ goto Main_Menu
 echo Exiting the program...
 pause
 exit
+
+
