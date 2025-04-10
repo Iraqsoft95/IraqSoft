@@ -984,7 +984,9 @@ goto Main_Menu
 
 @REM -------------------------> Promise_SA_ENABLE_BROKER <----------------------------- 
 :Promise_SA_ENABLE_BROKER
+net stop "MSSQL$SALES_DEV"
 sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "EXEC sp_changedbowner sa; ALTER DATABASE %DB_NAME% SET RESTRICTED_USER;ALTER DATABASE %DB_NAME% SET ENABLE_BROKER;ALTER DATABASE %DB_NAME% SET Multi_User"
+net start "MSSQL$SALES_DEV"
 echo Done
 pause
 goto Main_Menu
