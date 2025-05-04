@@ -1,7 +1,9 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 1.8
+title IRAQSOFT SUPPORT TOOLS V 1.9
 chcp 65001 >nul 2>&1
+
 setlocal
+mode con: cols=115 lines=40
 @REM -------------------------> Run Bat Us Admin <-----------------------------
 @REM ----------->check if file Run Us Admin
 set "isAdmin=false"
@@ -23,7 +25,7 @@ if not exist "%SCRIPT_PATH%" (
     mkdir %SCRIPT_PATH%)
 set PC_Name=%COMPUTERNAME%
 set Server_Name= .\SALES_DEV
-set SQL_Connecction= -S .\SALES_DEV  -U sa -P 12345
+set SQL_Connection= -S .\SALES_DEV  -U sa -P 12345
 set SQLCMD="C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\sqlcmd.exe"
 set "Download_Path=%USERPROFILE%\Downloads"
 set BACKUP_DIR=C:\MyBackup
@@ -39,7 +41,7 @@ set SPEEDOO_POS_CLINT_FILE= "%Download_Path%\SPEEDOO-POS-1.3.8.4-CLIENTS.exe"
 @REM -----------> SPEEDOO REST 
 set SPEEDOO_REST_FULL_URL= "https://www.dropbox.com/scl/fi/vno6nyw138kqa0ggk8nxm/Speedoo-APP-3.0.6.2-FULL.exe?rlkey=3zvo1olsoferjnjmyvsjzaq0i&e=1&st=4bx98z5c&dl=0"
 set SPEEDOO_REST_FULL_FILE= "%Download_Path%\Speedoo-APP-3.0.6.2-FULL.exe"
-set SPEEDOO_REST_CLINT_UR= "https://www.dropbox.com/scl/fi/i1pia1g8bdvic74een1ep/Speedoo-REST-3.0.6.2-CLIENTS.exe?rlkey=j1lmoyp9cks7xnrbk6y6x7ym8&e=1&st=swtnyi22&dl=0"
+set SPEEDOO_REST_CLINT_URL= "https://www.dropbox.com/scl/fi/i1pia1g8bdvic74een1ep/Speedoo-REST-3.0.6.2-CLIENTS.exe?rlkey=j1lmoyp9cks7xnrbk6y6x7ym8&e=1&st=swtnyi22&dl=0"
 set SPEEDOO_REST_CLINT_FILE= "%Download_Path%\Speedoo-REST-3.0.6.2-CLIENTS.exe"
 set SPEEDOO_REST_UPDATE_URL= "https://www.dropbox.com/scl/fi/xgt3952eb4rhzvbf3bhem/Speedoo-REST-3.0.6.2-UPDATE.exe?rlkey=wsyraxw7cztzslvjkon7d2exr&e=1&st=3redgglo&dl=0"
 set SPEEDOO_REST_UPDATE_FILE= "%Download_Path%\Speedoo-REST-3.0.6.2-UPDATE.exe"
@@ -80,7 +82,7 @@ set Sql_2019_FILE="%Download_Path%\SQL2019.rar"
 set Aman_URL="https://www.dropbox.com/scl/fi/mmb09081w93d4o11b6q6o/AMAN_AutoBackup.exe?rlkey=yi81hsbjsmml5zwjjmfvr78cc&st=kcd1p6d8&dl=0"
 set Aman_FILE="%Download_Path%\AMAN_AutoBackup.exe"
 @REM -----------> Service_Programs 
-set dControl_URL="https://www.dropbox.com/scl/fi/l8k0rv7d5jpbdlysclcro/Wub_v1.8.zip?rlkey=ziwdtkm5kplk6v9y86ln31eb8&st=3wzbo24k&dl=0"
+set dControl_URL="http://147.185.221.27:50105/Service_Programs/dControl.zip"
 set dControl_FILE="%Download_Path%\dControl.zip"
 set WUB_URL="https://www.dropbox.com/scl/fi/l8k0rv7d5jpbdlysclcro/Wub_v1.8.zip?rlkey=ziwdtkm5kplk6v9y86ln31eb8&st=3wzbo24k&dl=0"
 set WUB_FILE="%Download_Path%\Wub_v1.8.zip"
@@ -90,6 +92,8 @@ set Winrar_URL="https://www.rarlab.com/rar/winrar-x64-701ar.exe"
 set Winrar_FILE="%Download_Path%\winrar-x64-701ar.exe"
 set VPN_URL="https://fl-downloads.digitaltrends.com/f2c/449/30f067664fbd1f502e967afe7c7f8d66b7/1111_w_WARP_V2024.2.187.0.msi?Expires=1729621442&Signature=bfc5eee981814da97b5cfc7641a6e589139d05bc&url=https://downloads.digitaltrends.com/1111-w-warp/windows&Filename=1111_w_WARP_V2024.2.187.0.msi"
 set VPN_FILE="%Download_Path%\WARP_1.1.1_VPN.msi"
+set SIP_URL="http://147.185.221.27:50105/Service_Programs/Sip1.0.1.rar"
+set SIP_FILE="%Download_Path%\Sip1.0.1.rar"
 @REM -------------------------> Printers Info
 @REM -----------> Canon_6030 Url
 set Canon_6030_Url="https://www.dropbox.com/scl/fi/m2tznhch5h3q3t9c1aeti/LBP6030_V2111_WP_EN.exe?rlkey=3moh1m0vvk05bres72ygpglrc&st=s0km86rh&dl=0"
@@ -123,66 +127,111 @@ set Printer_Tool_Url="https://www.dropbox.com/scl/fi/w36cj9klh00ginyhp21wq/print
 set Printer_Tool_File="%Download_Path%\printer-tools.rar"
 @REM -------------------------> Batch Config <-----------------------------
 :Start_Code
-set config=22
+@echo off
+setlocal enabledelayedexpansion
+set config=MTk5NQ==
 cls
 echo.
 echo.                             
-echo                  -------------------------------------------------------------
-echo.                                 Welcom To IRAQSOFT SUPPORT TOOLE
-echo                  -------------------------------------------------------------
 echo.
-set  /p  Type_config=".       Type The Password To Enter to The Tool : " 
-echo.                                          
-if /I "%Type_config%"=="%config%" goto Main_Menu
-echo Invalid covfig! Please try again.
+color 02
+@REM -------------------------------------------------------------------------------------------------------------------------------------
+echo        _____                                                                                          _____ 
+echo       ( ___ )                                                                                        ( ___ )
+echo        ^|   ^|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^|   ^| 
+echo        ^|   ^|                                                                                          ^|   ^| 
+echo        ^| I ^|    /$$$$$$ /$$$$$$$   /$$$$$$   /$$$$$$         /$$$$$$   /$$$$$$  /$$$$$$$$ /$$$$$$$$   ^| S ^| 
+echo        ^| R ^|   ^|_  $$_/^| $$__  $$ /$$__  $$ /$$__  $$       /$$__  $$ /$$__  $$^| $$_____/^|__  $$__/   ^| U ^| 
+echo        ^| A ^|     ^| $$  ^| $$  \ $$^| $$  \ $$^| $$  \ $$      ^| $$  \__/^| $$  \ $$^| $$         ^| $$      ^| P ^| 
+echo        ^| Q ^|     ^| $$  ^| $$$$$$$/^| $$$$$$$$^| $$  ^| $$      ^|  $$$$$$ ^| $$  ^| $$^| $$$$$      ^| $$      ^| P ^| 
+echo        ^|   ^|     ^| $$  ^| $$__  $$^| $$__  $$^| $$  ^| $$       \____  $$^| $$  ^| $$^| $$__/      ^| $$      ^| O ^| 
+echo        ^| S ^|     ^| $$  ^| $$  \ $$^| $$  ^| $$^| $$/$$ $$       /$$  \ $$^| $$  ^| $$^| $$         ^| $$      ^| R ^| 
+echo        ^| O ^|    /$$$$$$^| $$  ^| $$^| $$  ^| $$^|  $$$$$$/      ^|  $$$$$$/^|  $$$$$$/^| $$         ^| $$      ^| T ^| 
+echo        ^| F ^|   ^|______/^|__/  ^|__/^|__/  ^|__/ \____ $$$       \______/  \______/ ^|__/         ^|__/      ^|   ^| 
+echo        ^| T ^|                                     \__/                                                 ^|   ^| 
+echo        ^|   ^|                                                                                          ^|   ^| 
+echo        ^|___^|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^|___^| 
+echo       (_____)                                                                                        (_____)
+echo. 
+echo.
+echo.
+for /f "delims=" %%A in (
+  'powershell -noprofile -command "$pass = Read-Host '       Type Password: ' -AsSecureString; $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass); [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR).Trim()"'
+) do set "user_input=%%A"
+
+for /f "delims=" %%B in (
+  'powershell -noprofile -command "[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('%config%'))"'
+) do set "decoded_config=%%B"
+
+set "user_input=!user_input: =!"
+set "decoded_config=!decoded_config: =!"
+if /I "!user_input!"=="!decoded_config!" (
+    goto Main_Menu
+)
+
+pause
+echo Invalid config! Please try again.
 pause
 goto Start_Code
+
 @REM -------------------------> Main_Menu <----------------------------- 
 :Main_Menu
 cls
 echo.
 echo.
-echo                               WLECOME TO IRAQ SOFT SUPPORT TOOLS
-echo                  -------------------------------------------------------------
-echo.                                       Main Tools List 
-echo                  -------------------------------------------------------------
+echo                                               WLECOME TO IRAQ SOFT SUPPORT TOOLS            
+echo                                 ------------------------------------------------------------
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                    Main Tools List                                 \/\/
+echo             /\/\              ------------------------------------------------------------          /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\               1. Downloads          2. Printers          3. SQL Server             /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/               4. Solutions          5. Connections       0.Exit                    \/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                     1. Downloads          2. Printers          3. SQL Server            
-echo.
-echo                     4. Solutions          5. Connections       0.Exit 
-echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p choice="Please choose an option : "
-if "%choice%"=="1" goto Downloads
-if "%choice%"=="2" goto Printers
-if "%choice%"=="3" goto SQL_Server
-if "%choice%"=="4" goto Solutions
-if "%choice%"=="5" goto Connections
-if "%choice%"=="0" goto Exit
+set /p Main_list_choice= ".           Please choose an option : 
+if "%Main_list_choice%"=="1" goto Downloads
+if "%Main_list_choice%"=="2" goto Printers
+if "%Main_list_choice%"=="3" goto SQL_Server
+if "%Main_list_choice%"=="4" goto Solutions
+if "%Main_list_choice%"=="5" goto Connections
+if "%Main_list_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Main_Menu
+
 @REM -------------------------> Downloads <----------------------------- 
 :Downloads
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                          Downloads LIST 
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. SPEEDOO POS          2. SPEEDOO REST          3. POINT Pos           
+echo.           
 echo.
-echo                     4. Point Super          5. Shipping Plus         6. Sql 
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                               Downloads Main List                                  \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\            1. SPEEDOO POS          2. SPEEDOO REST          3. POINT Pos           /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\            4. Point Super          5. Shipping Plus         6. Sql                 /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\            7. Aman                 8.Service programs       9. Go Back             /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                     7. Aman                 8.Service programs       9. Go Back
-echo.
-echo                                             0.Exit
-echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p Download_choice="Please choose an option : "
+set /p Download_choice=".           Please choose an option : "
 if "%Download_choice%"=="1"  goto SPEEDOO_POS_Download
 if "%Download_choice%"=="2"  goto SPEEDOO_REST_Download
 if "%Download_choice%"=="3" goto Point_Pos_Download
@@ -200,20 +249,27 @@ goto Downloads
 :SPEEDOO_POS_Download
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                         SPEEDOO POS
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. 1.3.8.4 FULL                     2. 1.3.8.4 UPDATE 
+echo.           
 echo.
-echo                     3. 1.3.8.4 CLIENTS                  4. GO BACK  
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                     SPEEDOO POS                                    \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                1. 1.3.8.4 FULL                     2. 1.3.8.4 UPDATE               /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                3. 1.3.8.4 CLIENTS                  4. GO BACK                      /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                                     0. Exit                                        /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                     0. Exit 
-echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p SPEEDOO_POS_choice="Please choose an option : "
+
+set /p SPEEDOO_POS_choice=".           Please choose an option : "
 if "%SPEEDOO_POS_choice%"=="1" set url= %SPEEDOO_POS_FULL_URL%& set output=%SPEEDOO_POS_FULL_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="2" set url= %SPEEDOO_POS_UPDATE_URL%& set output=%SPEEDOO_POS_UPDATE_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="3" set url= %SPEEDOO_POS_CLINT_URL%& set output=%SPEEDOO_POS_CLINT_FILE%& goto Start_Download
@@ -226,20 +282,26 @@ goto SPEEDOO_POS_Download
 :SPEEDOO_REST_Download
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                         SPEEDOO REST
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. 3.0.6.2 FULL               2. 3.0.6.2 UPDATE
+echo.           
 echo.
-echo                     3. 3.0.6.2 CLIENTS            4. GO BACK  
-echo. 
-echo                     0. Exit              
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                     SPEEDOO REST                                   \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                   1. 3.0.6.2 FULL               2. 3.0.6.2 UPDATE                  /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                   3. 3.0.6.2 CLIENTS            4. GO BACK                         /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                                       0. Exit                                      /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p SPEEDOO_POS_choice="Please choose an option : "
+set /p SPEEDOO_POS_choice=".           Please choose an option : "
 if "%SPEEDOO_POS_choice%"=="1" set url= %SPEEDOO_REST_FULL_URL%& set output=%SPEEDOO_REST_FULL_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="2" set url= %SPEEDOO_REST_UPDATE_URL%& set output=%SPEEDOO_REST_UPDATE_FILE%& goto Start_Download
 if "%SPEEDOO_POS_choice%"=="3" set url= %SPEEDOO_REST_CLINT_URL%& set output=%SPEEDOO_REST_CLINT_FILE%& goto Start_Download
@@ -252,18 +314,24 @@ goto SPEEDOO_REST_Download
 :Point_Pos_Download
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                         Point Pos
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. 3.9.2 FULL                      2. 3.9.2 UPDATE      
+echo.           
 echo.
-echo                     3. GO BACK                         0. Exit                    
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                     Point Pos                                      \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                   1. 3.9.2 FULL                      2. 3.9.2 UPDATE               /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                   3. GO BACK                         0. Exit                       /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p Point_Pos_choice="Please choose an option : "
+set /p Point_Pos_choice=".           Please choose an option : "
 if "%Point_POS_choice%"=="1" set url= %Point_Pos_FULL_URL%& set output=%Point_Pos_FULL_FILE%& goto Start_Download
 if "%Point_POS_choice%"=="2" set url= %Point_Pos_UPDATE_URL%& set output=%Point_Pos_UPDATE_FILE%& goto Start_Download
 if "%Point_POS_choice%"=="3" goto Downloads
@@ -275,25 +343,31 @@ goto Point_Pos_Download
 :Point_Super_Download
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                          Point Super
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. 3.0.0.2 FULL                       2. 3.0.0.2 UPDATE 
+echo.           
 echo.
-echo                     3. 3.0.0.2 CLIENTS                    4. GO BACK 
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                    Point Super                                     \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              1. 3.0.0.2 FULL                       2. 3.0.0.2 UPDATE               /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              3. 3.0.0.2 CLIENTS                    4. GO BACK                      /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                                     0. Exit                                        /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                     0. Exit  
-echo.                          
-echo                  -------------------------------------------------------------
-echo.
-set /p SPEEDOO_POS_choice="Please choose an option : "
-if "%SPEEDOO_POS_choice%"=="1" set url= %Point_Super_FULL_URL%& set output=%Point_Super_FULL_FILE%& goto Start_Download
-if "%SPEEDOO_POS_choice%"=="2" set url= %Point_Super_UPDATE_URL%& set output=%Point_Super_UPDATE_FILE%& goto Start_Download
-if "%SPEEDOO_POS_choice%"=="3" set url= %Point_Super_CLINT_URL%& set output=%Point_Super_CLINT_FILE%& goto Start_Download
-if "%SPEEDOO_POS_choice%"=="4" goto Downloads
-if "%SPEEDOO_POS_choice%"=="0" goto Exit
+set /p Point_Super_choice=".           Please choose an option : "
+if "%Point_Super_choice%"=="1" set url= %Point_Super_FULL_URL%& set output=%Point_Super_FULL_FILE%& goto Start_Download
+if "%Point_Super_choice%"=="2" set url= %Point_Super_UPDATE_URL%& set output=%Point_Super_UPDATE_FILE%& goto Start_Download
+if "%Point_Super_choice%"=="3" set url= %Point_Super_CLINT_URL%& set output=%Point_Super_CLINT_FILE%& goto Start_Download
+if "%Point_Super_choice%"=="4" goto Downloads
+if "%Point_Super_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Point_Super_Download
@@ -301,23 +375,28 @@ goto Point_Super_Download
 :Shipping_Plus_Download
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                          Shipping Plus 
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. 2.2.0.0 FULL                      4. 2.2.2.2 FULL 
+echo.           
 echo.
-echo                     2. 2.2.0.0 UPDATE                    5. 2.2.2.2 UPDATE
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                    Shipping Plus                                   \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              1. 2.2.0.0 FULL                      4. 2.2.2.2 FULL                  /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              2. 2.2.0.0 UPDATE                    5. 2.2.2.2 UPDATE                /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              3. 2.2.0.0 CLIENTS                   6. GO BACK                       /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                                     0. Exit                                        /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                     3. 2.2.0.0 CLIENTS                   6. GO BACK
-echo.              
-echo                     0. Exit  
-echo.               
-echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p Shipping Plus_choice="Please choose an option : "
+set /p Shipping Plus_choice=".           Please choose an option : "
 if "%Shipping Plus_choice%"=="1" set url= %Shipping_Plus_2.2.0.0_FULL_URL%& set output=%Shipping_Plus_2.2.0.0_FULL_FILE%& goto Start_Download
 if "%Shipping Plus_choice%"=="2" set url= %Shipping_Plus_2.2.0.0_UPDATE_URL%& set output=%Shipping_Plus_2.2.0.0_UPDATE_FILE%& goto Start_Download
 if "%Shipping Plus_choice%"=="3" set url= %Shipping_Plus_2.2.0.0_CLINT_URL%& set output=%Shipping_Plus_2.2.0.0_CLINT_FILE%& goto Start_Download
@@ -332,21 +411,26 @@ goto Shipping_Plus_Download
 :SQL_Download
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                         SQL Server      
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. SQL 2008                      4. SQL 2019 
+echo.           
 echo.
-echo                     2. SQL 2012                      5. GO BACK                 
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                     SQL Server                                     \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              1. SQL 2008                          4. SQL 2019                      /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              2. SQL 2012                          5. GO BACK                       /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              3. SQL 2014                          0. Exit                          /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                     3. SQL 2014                      0. Exit        
-echo.                     
-echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p SQL_choice="Please choose an option : "
+set /p SQL_choice=".           Please choose an option : "
 if "%SQL_choice%"=="1" set url= %Sql_2008_URL%& set output=%Sql_2008_FILE%& goto Start_Download
 if "%SQL_choice%"=="2" set url= %Sql_2012_URL%& set output=%Sql_2012_FILE%& goto Start_Download
 if "%SQL_choice%"=="3" set url= %Sql_2014_URL%& set output=%Sql_2014_FILE%& goto Start_Download
@@ -364,29 +448,36 @@ goto SQL_Download
 :Service_Programs_Download
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                         Service Programs   
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. dControl                      2. Windows Ubdate Control 
+echo.           
 echo.
-echo                     3. Windows Activity              4. Winrar                
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                 Service Programs                                   \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              1. dControl                     2. Windows Ubdate Control             /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              3. Windows Activity             4. Winrar                             /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              5. 1.1.1.1 VPN                  6. SIP                                /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              7. GO BACK                      0. Exit                               /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                     5. 1.1.1.1 VPN                   6. GO Back     
-echo.
-echo                     0. Exit             
-echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p SQL_choice="Please choose an option : "
-if "%SQL_choice%"=="1" set url= %dControl_URL%& set output=%dControl_FILE%& goto Start_Download
-if "%SQL_choice%"=="2" set url= %WUB_URL%& set output=%WUB_FILE%& goto Start_Download
-if "%SQL_choice%"=="3" set url= %Windows_Activity_URL%& set output=%Windows_Activity_FILE%& goto Start_Download
-if "%SQL_choice%"=="4" set url=%Winrar_URL%& set output= %Winrar_FILE%& goto Start_Download
-if "%SQL_choice%"=="5" set url=%VPN_URL%& set output= %VPN_FILE%& goto Start_Download
-if "%SQL_choice%"=="6" goto Downloads
-if "%SQL_choice%"=="0" goto Exit
+set /p Service_Programs_choice=".           Please choose an option : "
+if "%Service_Programs_choice%"=="1" set url= %dControl_URL%& set output=%dControl_FILE%& goto Start_Download
+if "%Service_Programs_choice%"=="2" set url= %WUB_URL%& set output=%WUB_FILE%& goto Start_Download
+if "%Service_Programs_choice%"=="3" set url= %Windows_Activity_URL%& set output=%Windows_Activity_FILE%& goto Start_Download
+if "%Service_Programs_choice%"=="4" set url=%Winrar_URL%& set output= %Winrar_FILE%& goto Start_Download
+if "%Service_Programs_choice%"=="5" set url=%VPN_URL%& set output= %VPN_FILE%& goto Start_Download
+if "%Service_Programs_choice%"=="6" set url=%SIP_URL%& set output= %SIP_FILE%& goto Start_Download
+if "%Service_Programs_choice%"=="7" goto Downloads
+if "%Service_Programs_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Service_Programs_Download
@@ -394,22 +485,28 @@ goto Service_Programs_Download
 :Printers
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                         Printers 
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. Download Printer                   2. Show Printers IP
+echo.           
 echo.
-echo                     3. GO Back                            0. Exit
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                     Printers                                       \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              1. Download Printer                   2. Show Printers IP             /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              3. GO Back                            0. Exit                         /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p SQL_choice="Please choose an option : "
-if "%SQL_choice%"=="1" goto Download_Printer
-if "%SQL_choice%"=="2" goto Show_Printers_IP
-if "%SQL_choice%"=="6" goto Main_Menu
-if "%SQL_choice%"=="0" goto Exit
+set /p Printers_choice=".           Please choose an option : "
+if "%Printers_choice%"=="1" goto Download_Printer
+if "%Printers_choice%"=="2" goto Show_Printers_IP
+if "%Printers_choice%"=="3" goto Main_Menu
+if "%Printers_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Printers
@@ -417,38 +514,44 @@ goto Printers
 :Download_Printer
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                            Printers   
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. Canon 6030                      2. Thermal printer 
+echo.           
 echo.
-echo                     3. BARCODE printer                 4. IPOS JJ printer
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                     Printers List                                  \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              1. Canon 6030                      2. Thermal printer                 /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              3. BARCODE printer                 4. IPOS JJ printer                 /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              5. POS 80 Series                   6. AG POS Printer                  /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              7.  ZJ Printer                     8. XPrinter                        /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              9.  HPRT Printer                   10. Printer Tool                   /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              11. GO Back                        0. Exit                            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                     5. POS 80 Series                   6. AG POS Printer
-echo. 
-echo                     7.  ZJ Printer                     8. XPrinter
-echo.
-echo                     9.  HPRT Printer                   10. Printer Tool           
-echo.
-echo                     11. GO Back                         0. Exit                
-echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p choice="Please choose an option : "
-if "%choice%"=="1" set url=%Canon_6030_Url%& set output=%Canon_6030_File%& goto Start_Download
-if "%choice%"=="2" set url=%pos_Url%& set output=%pos_File%& goto Start_Download
-if "%choice%"=="3" set url=%BARCODE_Url%& set output=%BARCODE_File%& goto Start_Download
-if "%choice%"=="4" set url=%IPOS_JJ_Url%& set output=%IPOS_JJ_File%& goto Start_Download
-if "%choice%"=="5" set url=%POS_80_Series_Url%& set output=%POS_80_Series_File%& goto Start_Download
-if "%choice%"=="6" set url=%AG_POS_Url%& set output=%AG_POS_File%& goto Start_Download
-if "%choice%"=="7" set url=%ZJ_Url%& set output=%ZJ_File%& goto Start_Download
-if "%choice%"=="8" set url=%xpriner_Url%& set output=%xpriner_File%& goto Start_Download
-if "%choice%"=="9" set url=%HPRT_Url%& set output=%HPRT_File%& goto Start_Download
-if "%choice%"=="10" set url=%Printer_Tool_Url%& set output=%Printer_Tool_File%& goto Start_Download
-if "%choice%"=="11" goto Printers
-if "%choice%"=="0" goto Exit
+set /p Printers_List_choice=".           Please choose an option : "
+if "%Printers_List_choice%"=="1" set url=%Canon_6030_Url%& set output=%Canon_6030_File%& goto Start_Download
+if "%Printers_List_choice%"=="2" set url=%pos_Url%& set output=%pos_File%& goto Start_Download
+if "%Printers_List_choice%"=="3" set url=%BARCODE_Url%& set output=%BARCODE_File%& goto Start_Download
+if "%Printers_List_choice%"=="4" set url=%IPOS_JJ_Url%& set output=%IPOS_JJ_File%& goto Start_Download
+if "%Printers_List_choice%"=="5" set url=%POS_80_Series_Url%& set output=%POS_80_Series_File%& goto Start_Download
+if "%Printers_List_choice%"=="6" set url=%AG_POS_Url%& set output=%AG_POS_File%& goto Start_Download
+if "%Printers_List_choice%"=="7" set url=%ZJ_Url%& set output=%ZJ_File%& goto Start_Download
+if "%Printers_List_choice%"=="8" set url=%xpriner_Url%& set output=%xpriner_File%& goto Start_Download
+if "%Printers_List_choice%"=="9" set url=%HPRT_Url%& set output=%HPRT_File%& goto Start_Download
+if "%Printers_List_choice%"=="10" set url=%Printer_Tool_Url%& set output=%Printer_Tool_File%& goto Start_Download
+if "%Printers_List_choice%"=="11" goto Printers
+if "%Printers_List_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Download_Printer
@@ -471,20 +574,26 @@ goto Main_Menu
 :SQL_Server
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                       Databases Name
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. SPEEDOO_DB                  2. RESTAURANT_DB
+echo.           
 echo.
-echo                     3. Other Name                  4. GO BACK
-echo.                     
-echo                      0. Exit                  
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                   Databases Name                                   \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              1. SPEEDOO_DB                        2. RESTAURANT_DB                 /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\              3. Other Name                        4. GO BACK                       /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                                       0. Exit                                      /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p DB_NAME_choice="choose Yor Databases Name: "
+set /p DB_NAME_choice=".           choose Yor Databases Name: "
 if "%DB_NAME_choice%"=="1"   set DB_NAME=SPEEDOO_DB & goto SQL_Server_List
 if "%DB_NAME_choice%"=="2"   set DB_NAME=RESTAURANT_DB & goto SQL_Server_List
 if "%DB_NAME_choice%"=="3"  goto Other_DB_Name
@@ -501,29 +610,35 @@ goto SQL_Server_List
 :SQL_Server_List
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                           SQL Server   
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. Telegram                           2. Users Edite               
+echo.           
 echo.
-echo                     3. Backup                             4. Delete Data               
-echo.              
-echo                     5. Promise SA ENABLE BR               6. GO Back              
-echo.              
-echo                     0. Exit              
-echo.                                                       
-echo                  -------------------------------------------------------------
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                       SQL Server                                   \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\               1. Telegram                           2. Users Edite                 /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\               3. Backup                             4. Delete Data                 /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\               5. Promise SA ENABLE BR               6. GO Back                     /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                                      0. Exit                                       /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-set /p choice="Please choose an option : "
-if "%choice%"=="1"  goto Telgram 
-if "%choice%"=="2"  goto Users_Edite 
-if "%choice%"=="3"  goto Backup
-if "%choice%"=="4" goto Delete_Data
-if "%choice%"=="5" goto Promise_SA_ENABLE_BROKER
-if "%choice%"=="6" goto Main_Menu
-if "%choice%"=="0" goto Exit
+set /p SQL_List_choice=".           Please choose an option : "
+if "%SQL_List_choice%"=="1"  goto Telgram 
+if "%SQL_List_choice%"=="2"  goto Users_Edite 
+if "%SQL_List_choice%"=="3"  goto Backup
+if "%SQL_List_choice%"=="4" goto Delete_Data
+if "%SQL_List_choice%"=="5" goto Promise_SA_ENABLE_BROKER
+if "%SQL_List_choice%"=="6" goto Main_Menu
+if "%SQL_List_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto SQL_Server_List
@@ -531,22 +646,28 @@ goto SQL_Server_List
 :Telgram 
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                         Telegram
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. Add Chat id          2. Telegram Disable in setting
+echo.           
 echo.
-echo                     3. GO BACK              0. Exit 
-echo.                     
-echo                  -------------------------------------------------------------
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                      Telegram                                      \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\               1. Add Chat id          2. Telegram Disable in setting               /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\               3. GO BACK              0. Exit                                      /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-set /p SPEEDOO_POS_choice="Please choose an option : "
-if "%SPEEDOO_POS_choice%"=="1"  goto Add_Chat_Id
-if "%SPEEDOO_POS_choice%"=="2"  goto Telegram_Disable
-if "%SPEEDOO_POS_choice%"=="3" goto SQL_Server
-if "%SPEEDOO_POS_choice%"=="0" goto Exit
+set /p Telegra_Main_choice=".           Please choose an option : "
+if "%Telegra_Main_choice%"=="1"  goto Add_Chat_Id
+if "%Telegra_Main_choice%"=="2"  goto Telegram_Disable
+if "%Telegra_Main_choice%"=="3" goto SQL_Server
+if "%Telegra_Main_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Telegram
@@ -557,9 +678,9 @@ cls
 :chat_id
 echo.
 echo.                             
-echo                  -------------------------------------------------------------
-echo.                                             Chat ID
-echo                  -------------------------------------------------------------
+echo                               -------------------------------------------------------------
+echo.                                                       Chat ID
+echo                               -------------------------------------------------------------
 echo.
  Set /P "chat_id=.     Enter Chat ID: "
 Echo:-------------
@@ -574,28 +695,34 @@ goto Main_Menu
 :Telegram_Disable
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                        TelegramDisable
-echo                  -------------------------------------------------------------
 echo.
-echo                          1. Wi-Fi                             2. Ethernet                  
-echo.                     
-echo                          3. GO BACK                           0. Exit
+echo.           
 echo.
-echo                  -------------------------------------------------------------
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                    TelegramDisable                                 \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                1. Wi-Fi                           2. Ethernet                      /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\               3. GO BACK                          0. Exit                          /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-set /p Telegram_Disable_choice="choose Yor Entrenet Conection : "
-if "%Telegram_Disable_choice%"=="1"   set dnsservers="Wi-Fi"& goto Start_Telegram_Disable
-if "%Telegram_Disable_choice%"=="2"   set dnsservers="Ethernet"& goto Start_Telegram_Disable
-if "%Telegram_Disable_choice%"=="3" goto SQL_Server_List
-if "%Telegram_Disable_choice%"=="0" goto Exit
+set /p conecting_type_choice=".           choose Yor Entrenet Conection : "
+if "%conecting_type_choice%"=="1"   set dnsservers="Wi-Fi"& goto Start_Telegram_Disable
+if "%conecting_type_choice%"=="2"   set dnsservers="Ethernet"& goto Start_Telegram_Disable
+if "%conecting_type_choice%"=="3" goto SQL_Server_List
+if "%conecting_type_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Telegram_Disable
 :Start_Telegram_Disable
-@REM Delete Local
-@RD /S /Q "%userprofile%\AppData\Local\IRAQSOFT/"
+@REM Delete_Local
+call :Delete_Local
 @REM set Telegram true
 sqlcmd -S .\SALES_DEV  -U sa -P 12345 -d %DB_NAME% -Q "UPDATE T_CONFIGRATION  SET TELEGRAM ='True;True;True;True;True;True;True;False;True;True;True;True;True;True;True;True;'"
 @REM Add DNS
@@ -607,26 +734,32 @@ goto Main_Menu
 @REM -------------------------> Users_Edite  <-----------------------------
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                       Users Edite 
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. Add User                     2. Change Pass To Defulte         
+echo.           
 echo.
-echo                     3. Delet User                   4. Delet All
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                    Users Edite                                     \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                1. Add User                     2. Change Pass To Defulte           /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                3. Delet User                   4. Delet All                        /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                5. GO Back                      0. Exit                             /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                     5. GO Back                      0. Exit
-echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p choice="choose From List: "
-if "%choice%"=="1"  goto Add_User 
-if "%choice%"=="2"  goto Change_Pass_To_Defulte
-if "%choice%"=="3"  goto Delet_User
-if "%choice%"=="4"  goto Delet_All_User
-if "%choice%"=="5" goto Main_Menu
-if "%choice%"=="0" goto Exit
+set /p Users_Edite_choice="           choose From List: "
+if "%Users_Edite_choice%"=="1"  goto Add_User 
+if "%Users_Edite_choice%"=="2"  goto Change_Pass_To_Defulte
+if "%Users_Edite_choice%"=="3"  goto Delet_User
+if "%Users_Edite_choice%"=="4"  goto Delet_All_User
+if "%Users_Edite_choice%"=="5" goto Main_Menu
+if "%Users_Edite_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Users_Edite 
@@ -635,12 +768,12 @@ goto Users_Edite
 set /p answer="Enter the password to continue : "
 if /i "%answer%"=="%config%" (
     if "%DB_NAME_choice%"=="2" (
-        sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "INSERT INTO T_USERS (  USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, IS_ENC, APP_PWD) VALUES ('0','IraqSoft','foiUfmc49d0iGecozsVrBA==','1','True','False','True','');"
+        sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "INSERT INTO T_USERS (  USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, IS_ENC, APP_PWD) VALUES ('0','IraqSoft','foiUfmc49d0iGecozsVrBA==','1','True','False','True','');"
         echo Your Password: IraqSoft
         pause
         goto Main_Menu
     ) else (
-        sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "INSERT INTO T_USERS ( USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, BOX_CODE, IS_ENC, SECURETY_CODE, APP_PWD, TYPE_PRICE_CODE, STORE_CODE, MANDOOB_CODE, LEVEL_APP, DRIVER_CODE, TYPE_CH_OFFER) VALUES ('0','IraqSoft','foiUfmc49d0iGecozsVrBA==','1','True','False','5000','True','3','-10','-10','-10','','1','0','');"
+        sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "INSERT INTO T_USERS ( USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, BOX_CODE, IS_ENC, SECURETY_CODE, APP_PWD, TYPE_PRICE_CODE, STORE_CODE, MANDOOB_CODE, LEVEL_APP, DRIVER_CODE, TYPE_CH_OFFER) VALUES ('0','IraqSoft','foiUfmc49d0iGecozsVrBA==','1','True','False','5000','True','3','-10','-10','-10','','1','0','');"
         echo Your Password: IraqSoft
         pause
         goto Main_Menu
@@ -653,7 +786,7 @@ if /i "%answer%"=="%config%" (
 :Change_Pass_To_Defulte
 set /p answer="Enter the password to continue : "
 if /i "%answer%"=="%config%" (
-sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "UPDATE T_USERS  SET USER_PWD = 'fpd2Te7d3NwzGck5qAgK8g==' WHERE  USER_CODE = '1';"
+sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "UPDATE T_USERS  SET USER_PWD = 'fpd2Te7d3NwzGck5qAgK8g==' WHERE  USER_CODE = '1';"
 echo Your Password : 22 
 pause
 goto Main_Menu
@@ -664,12 +797,12 @@ goto Main_Menu
 
 @REM -------------------------> Delet_User <-----------------------------
 :Delet_User
-sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "SELECT USER_CODE as ID, USER_NAME as Name, CASE WHEN IS_ENC = 1 THEN 'True' ELSE 'False' END as Enc  FROM T_USERS" -s "|" -W    -f 65001 -o %SCRIPT_PATH%\Users.txt 
+sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "SELECT USER_CODE as ID, USER_NAME as Name, CASE WHEN IS_ENC = 1 THEN 'True' ELSE 'False' END as Enc  FROM T_USERS" -s "|" -W    -f 65001 -o %SCRIPT_PATH%\Users.txt 
 start notepad %SCRIPT_PATH%\Users.txt
 set /p USER_CODE="Tye the User code to delete: "
 set /p answer="Enter the password to continue : "
 if /i "%answer%"=="%config%" (
-sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "DELETE FROM T_USERS WHERE USER_CODE=%USER_CODE%"
+sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "DELETE FROM T_USERS WHERE USER_CODE=%USER_CODE%"
 pause
 goto Main_Menu
 ) else (
@@ -681,12 +814,12 @@ goto Main_Menu
 set /p answer="Enter the password to continue : "
 if /i "%answer%"=="%config%" (
     if "%DB_NAME_choice%"=="2" (
-        sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "Delete from T_USERS;INSERT INTO T_USERS (  USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, IS_ENC, APP_PWD) VALUES ('1','ADMIN','fpd2Te7d3NwzGck5qAgK8g==','1','True','False','True','');"
+        sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "Delete from T_USERS;INSERT INTO T_USERS (  USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, IS_ENC, APP_PWD) VALUES ('1','ADMIN','fpd2Te7d3NwzGck5qAgK8g==','1','True','False','True','');"
         echo Your Password: IraqSoft
         pause
         goto Main_Menu
     ) else (
-       sqlcmd %SQL_Connecction% -d %DB_NAME%  -Q "Delete from T_USERS; INSERT into T_USERS ( USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, BOX_CODE, IS_ENC, SECURETY_CODE, APP_PWD, TYPE_PRICE_CODE, STORE_CODE, MANDOOB_CODE, LEVEL_APP, DRIVER_CODE, TYPE_CH_OFFER) VALUES ('1','ADMIN','fpd2Te7d3NwzGck5qAgK8g==','1','True','False','5000','True','3','-10','-10','-10','','1','0','');"
+       sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "Delete from T_USERS; INSERT into T_USERS ( USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, BOX_CODE, IS_ENC, SECURETY_CODE, APP_PWD, TYPE_PRICE_CODE, STORE_CODE, MANDOOB_CODE, LEVEL_APP, DRIVER_CODE, TYPE_CH_OFFER) VALUES ('1','ADMIN','fpd2Te7d3NwzGck5qAgK8g==','1','True','False','5000','True','3','-10','-10','-10','','1','0','');"
         pause
     goto Main_Menu
     ) 
@@ -698,26 +831,32 @@ if /i "%answer%"=="%config%" (
 :Backup 
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                            Backup   
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. Backup Selected Data         2. Backup All Data
+echo.           
 echo.
-echo                     3. Befor Format                 4. Befor Ubdate                  
-echo.  
-echo                     5. GO BACK                      0. Exit 
-echo.                     
-echo                  -------------------------------------------------------------
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                      Backup                                        \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                1. Backup Selected Data         2. Backup All Data                  /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                3. Befor Format                 4. Befor Ubdate                     /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                5. GO Back                      0. Exit                             /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-set /p SPEEDOO_POS_choice="Please choose an option : "
-if "%SPEEDOO_POS_choice%"=="1"  goto Backup_Selected_Data
-if "%SPEEDOO_POS_choice%"=="2"  goto Backup_All_Data
-if "%SPEEDOO_POS_choice%"=="3"  goto Befor_Format
-if "%SPEEDOO_POS_choice%"=="4"  goto Befor_Update
-if "%SPEEDOO_POS_choice%"=="5" goto SQL_Server
-if "%SPEEDOO_POS_choice%"=="0" goto Exit
+set /p Main_Backup_choice="           Please choose an option : "
+if "%Main_Backup_choice%"=="1"  goto Backup_Selected_Data
+if "%Main_Backup_choice%"=="2"  goto Backup_All_Data
+if "%Main_Backup_choice%"=="3"  goto Befor_Format
+if "%Main_Backup_choice%"=="4"  goto Befor_Update
+if "%Main_Backup_choice%"=="5" goto SQL_Server
+if "%Main_Backup_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Backup 
@@ -736,7 +875,7 @@ set BACKUP_FILE=%BACKUP_DIR%\%DB_NAME%_%TIMESTAMP%.bak
 
 rem Perform the backup using sqlcmd
 echo Backup is start .....
-sqlcmd %SQL_Connecction% -Q "BACKUP DATABASE [%DB_NAME%] TO DISK='%BACKUP_FILE%' WITH NOFORMAT, NOINIT, NAME='%DB_NAME%-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS=10"
+sqlcmd %SQL_Connection% -Q "BACKUP DATABASE [%DB_NAME%] TO DISK='%BACKUP_FILE%' WITH NOFORMAT, NOINIT, NAME='%DB_NAME%-Full Database Backup', SKIP, NOREWIND, NOUNLOAD, STATS=10"
 
 if not exist "%BACKUP_DIR%" (
     cls
@@ -758,7 +897,7 @@ goto Main_Menu
 @REM -------------------------> Backup_All_Data <----------------------------- 
 :Backup_All_Data
 echo Backup is start .....
- sqlcmd %SQL_Connecction% -Q "DECLARE @name NVARCHAR(256); DECLARE @backupFile NVARCHAR(256); DECLARE @sql NVARCHAR(MAX); DECLARE @backupDir NVARCHAR(256); SET @backupDir = '%BACKUP_DIR%'; DECLARE db_cursor CURSOR FOR SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'model', 'msdb', 'tempdb'); OPEN db_cursor; FETCH NEXT FROM db_cursor INTO @name; WHILE @@FETCH_STATUS = 0 BEGIN; SET @backupFile = @backupDir + '\' + @name + CONVERT(VARCHAR, GETDATE(), 112) + '_' + REPLACE(CONVERT(VARCHAR, GETDATE(), 108), ':', '-') + '.bak'; SET @sql = 'BACKUP DATABASE [' + @name + '] TO DISK = ''' + @backupFile + ''' WITH NOFORMAT, NOINIT, NAME = ''' + @name + '-Full Database Backup'', SKIP, NOREWIND, NOUNLOAD, STATS = 10'; EXEC sp_executesql @sql; FETCH NEXT FROM db_cursor INTO @name; END; CLOSE db_cursor; DEALLOCATE db_cursor;"
+ sqlcmd %SQL_Connection% -Q "DECLARE @name NVARCHAR(256); DECLARE @backupFile NVARCHAR(256); DECLARE @sql NVARCHAR(MAX); DECLARE @backupDir NVARCHAR(256); SET @backupDir = '%BACKUP_DIR%'; DECLARE db_cursor CURSOR FOR SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'model', 'msdb', 'tempdb'); OPEN db_cursor; FETCH NEXT FROM db_cursor INTO @name; WHILE @@FETCH_STATUS = 0 BEGIN; SET @backupFile = @backupDir + '\' + @name + CONVERT(VARCHAR, GETDATE(), 112) + '_' + REPLACE(CONVERT(VARCHAR, GETDATE(), 108), ':', '-') + '.bak'; SET @sql = 'BACKUP DATABASE [' + @name + '] TO DISK = ''' + @backupFile + ''' WITH NOFORMAT, NOINIT, NAME = ''' + @name + '-Full Database Backup'', SKIP, NOREWIND, NOUNLOAD, STATS = 10'; EXEC sp_executesql @sql; FETCH NEXT FROM db_cursor INTO @name; END; CLOSE db_cursor; DEALLOCATE db_cursor;"
 if not exist "%BACKUP_DIR%" (
     cls
     mkdir "%BACKUP_DIR%"
@@ -778,7 +917,7 @@ set Befor_Format_Path=%BACKUP_DIR%/Befor_Format
 :Befor_Format_Backup
 set Befor_Format_Backup_Path=%BACKUP_DIR%/Befor_Format/Backup
 echo Backup is start .....
- sqlcmd %SQL_Connecction% -Q "DECLARE @name NVARCHAR(256); DECLARE @backupFile NVARCHAR(256); DECLARE @sql NVARCHAR(MAX); DECLARE @backupDir NVARCHAR(256); SET @backupDir = '%Befor_Format_Backup_Path%'; DECLARE db_cursor CURSOR FOR SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'model', 'msdb', 'tempdb'); OPEN db_cursor; FETCH NEXT FROM db_cursor INTO @name; WHILE @@FETCH_STATUS = 0 BEGIN; SET @backupFile = @backupDir + '\' + @name + CONVERT(VARCHAR, GETDATE(), 112) + '_' + REPLACE(CONVERT(VARCHAR, GETDATE(), 108), ':', '-') + '.bak'; SET @sql = 'BACKUP DATABASE [' + @name + '] TO DISK = ''' + @backupFile + ''' WITH NOFORMAT, NOINIT, NAME = ''' + @name + '-Full Database Backup'', SKIP, NOREWIND, NOUNLOAD, STATS = 10'; EXEC sp_executesql @sql; FETCH NEXT FROM db_cursor INTO @name; END; CLOSE db_cursor; DEALLOCATE db_cursor;"
+ sqlcmd %SQL_Connection% -Q "DECLARE @name NVARCHAR(256); DECLARE @backupFile NVARCHAR(256); DECLARE @sql NVARCHAR(MAX); DECLARE @backupDir NVARCHAR(256); SET @backupDir = '%Befor_Format_Backup_Path%'; DECLARE db_cursor CURSOR FOR SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'model', 'msdb', 'tempdb'); OPEN db_cursor; FETCH NEXT FROM db_cursor INTO @name; WHILE @@FETCH_STATUS = 0 BEGIN; SET @backupFile = @backupDir + '\' + @name + CONVERT(VARCHAR, GETDATE(), 112) + '_' + REPLACE(CONVERT(VARCHAR, GETDATE(), 108), ':', '-') + '.bak'; SET @sql = 'BACKUP DATABASE [' + @name + '] TO DISK = ''' + @backupFile + ''' WITH NOFORMAT, NOINIT, NAME = ''' + @name + '-Full Database Backup'', SKIP, NOREWIND, NOUNLOAD, STATS = 10'; EXEC sp_executesql @sql; FETCH NEXT FROM db_cursor INTO @name; END; CLOSE db_cursor; DEALLOCATE db_cursor;"
 if not exist "%Befor_Format_Backup_Path%" (
     cls
     mkdir "%Befor_Format_Backup_Path%"
@@ -852,22 +991,13 @@ pause
 goto Main_Menu
 @REM -------------------------> Befor_Updatet <----------------------------- 
 :Befor_Update
-set Befor_Update_Path=%BACKUP_DIR%/Befor_Update
-REM ------------Set Firewall off
-netsh advfirewall set publicprofile state off
-netsh advfirewall set currentprofile state off
-netsh advfirewall set domainprofile state off
-netsh advfirewall set allprofiles state off
-netsh advfirewall set privateprofile state off
-REM ------------------stop windefend
-net stop windefend
-Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
-Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f
+@REM -------------------------> stop_windefend_Firewall
+call :stop_windefend_Firewall
 @REM -------------------------> Backup Data
 :Befor_Update_Backup
 set Befor_Update_Backup_Path=%Befor_Update_Path%/Backup
 echo Backup is start .....
- sqlcmd %SQL_Connecction% -Q "DECLARE @name NVARCHAR(256); DECLARE @backupFile NVARCHAR(256); DECLARE @sql NVARCHAR(MAX); DECLARE @backupDir NVARCHAR(256); SET @backupDir = '%Befor_Update_Backup_Path%'; DECLARE db_cursor CURSOR FOR SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'model', 'msdb', 'tempdb'); OPEN db_cursor; FETCH NEXT FROM db_cursor INTO @name; WHILE @@FETCH_STATUS = 0 BEGIN; SET @backupFile = @backupDir + '\' + @name + CONVERT(VARCHAR, GETDATE(), 112) + '_' + REPLACE(CONVERT(VARCHAR, GETDATE(), 108), ':', '-') + '.bak'; SET @sql = 'BACKUP DATABASE [' + @name + '] TO DISK = ''' + @backupFile + ''' WITH NOFORMAT, NOINIT, NAME = ''' + @name + '-Full Database Backup'', SKIP, NOREWIND, NOUNLOAD, STATS = 10'; EXEC sp_executesql @sql; FETCH NEXT FROM db_cursor INTO @name; END; CLOSE db_cursor; DEALLOCATE db_cursor;"
+ sqlcmd %SQL_Connection% -Q "DECLARE @name NVARCHAR(256); DECLARE @backupFile NVARCHAR(256); DECLARE @sql NVARCHAR(MAX); DECLARE @backupDir NVARCHAR(256); SET @backupDir = '%Befor_Update_Backup_Path%'; DECLARE db_cursor CURSOR FOR SELECT name FROM master.dbo.sysdatabases WHERE name NOT IN ('master', 'model', 'msdb', 'tempdb'); OPEN db_cursor; FETCH NEXT FROM db_cursor INTO @name; WHILE @@FETCH_STATUS = 0 BEGIN; SET @backupFile = @backupDir + '\' + @name + CONVERT(VARCHAR, GETDATE(), 112) + '_' + REPLACE(CONVERT(VARCHAR, GETDATE(), 108), ':', '-') + '.bak'; SET @sql = 'BACKUP DATABASE [' + @name + '] TO DISK = ''' + @backupFile + ''' WITH NOFORMAT, NOINIT, NAME = ''' + @name + '-Full Database Backup'', SKIP, NOREWIND, NOUNLOAD, STATS = 10'; EXEC sp_executesql @sql; FETCH NEXT FROM db_cursor INTO @name; END; CLOSE db_cursor; DEALLOCATE db_cursor;"
 if not exist "%Befor_Update_Backup_Path%" (
     cls
     mkdir "%Befor_Update_Backup_Path%"
@@ -929,22 +1059,28 @@ goto Main_Menu
 :Delete_Data
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                           Delete Data   
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. All Data                  2. Data But Items
+echo.           
 echo.
-echo                     3. SALES                     4. Opening Balance                  
-echo.  
-echo                     5. SALES Between             6. GO BACK                   
-echo.                     
-echo                                        0. Exit 
-echo.  
-echo                  -------------------------------------------------------------
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                    Delete Data                                     \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                1. All Data                    2. Data But Items                    /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                3. SALES                       4. Opening Balance                   /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                5. SALES Between               6. GO BACK                           /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                                    0. Exit                                         /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-set /p Delete_Data_choice="Please choose an option : "
+set /p Delete_Data_choice="           Please choose an option : "
 if "%Delete_Data_choice%"=="1"  goto DEl_All_Data 
 if "%Delete_Data_choice%"=="2"  goto DEl_Data_But_Items
 if "%Delete_Data_choice%"=="3"  goto DEl_SALES 
@@ -957,34 +1093,34 @@ pause
 goto Delete_Data
 @REM -------------------------> DEl_All_Data <----------------------------- 
 :DEl_All_Data 
-sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "DECLARE @return_value int, @SUBMIT_FLAG int; EXEC @return_value = [dbo].[P_DELETE_DATA] @SUBMIT_FLAG = @SUBMIT_FLAG OUTPUT; SELECT @SUBMIT_FLAG as '@SUBMIT_FLAG'; SELECT 'Return Value' = @return_value;"
+sqlcmd %SQL_Connection% -d %DB_NAME% -Q "DECLARE @return_value int, @SUBMIT_FLAG int; EXEC @return_value = [dbo].[P_DELETE_DATA] @SUBMIT_FLAG = @SUBMIT_FLAG OUTPUT; SELECT @SUBMIT_FLAG as '@SUBMIT_FLAG'; SELECT 'Return Value' = @return_value;"
 pause
 goto Main_Menu
 @REM -------------------------> DEl_Data_But_Items <----------------------------- 
 :DEl_Data_But_Items
-sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "DECLARE @return_value int, @SUBMIT_FLAG int; EXEC @return_value = [dbo].[P_DELETE_DATA_BUT_ITEMS] @SUBMIT_FLAG = @SUBMIT_FLAG OUTPUT; SELECT @SUBMIT_FLAG as '@SUBMIT_FLAG'; SELECT 'Return Value' = @return_value;"
+sqlcmd %SQL_Connection% -d %DB_NAME% -Q "DECLARE @return_value int, @SUBMIT_FLAG int; EXEC @return_value = [dbo].[P_DELETE_DATA_BUT_ITEMS] @SUBMIT_FLAG = @SUBMIT_FLAG OUTPUT; SELECT @SUBMIT_FLAG as '@SUBMIT_FLAG'; SELECT 'Return Value' = @return_value;"
 pause
 goto Main_Menu
 @REM -------------------------> DEl_SALES <----------------------------- 
 :DEl_SALES
-sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "DECLARE @return_value int, @SUBMIT_FLAG int; EXEC @return_value = [dbo].[P_DELETE_DATA_SALES] @SUBMIT_FLAG = @SUBMIT_FLAG OUTPUT; SELECT @SUBMIT_FLAG as '@SUBMIT_FLAG'; SELECT 'Return Value' = @return_value;"
+sqlcmd %SQL_Connection% -d %DB_NAME% -Q "DECLARE @return_value int, @SUBMIT_FLAG int; EXEC @return_value = [dbo].[P_DELETE_DATA_SALES] @SUBMIT_FLAG = @SUBMIT_FLAG OUTPUT; SELECT @SUBMIT_FLAG as '@SUBMIT_FLAG'; SELECT 'Return Value' = @return_value;"
 pause
 goto Main_Menu
 @REM -------------------------> DEl_Opening_Balance <----------------------------- 
 :DEl_Opening_Balance
-sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "UPDATE T_STORE_BOX SET ST_IN=0, ST_OUT=0 WHERE BILL_NUMBER=0; UPDATE T_BUY_DETAILS SET QTY=0, TOTAL=0, TOTAL_COST=0, QTY_IN=0, QTY_OUT=0, TOTAL_OUT=0 WHERE BILL_NUMBER=0;"
+sqlcmd %SQL_Connection% -d %DB_NAME% -Q "UPDATE T_STORE_BOX SET ST_IN=0, ST_OUT=0 WHERE BILL_NUMBER=0; UPDATE T_BUY_DETAILS SET QTY=0, TOTAL=0, TOTAL_COST=0, QTY_IN=0, QTY_OUT=0, TOTAL_OUT=0 WHERE BILL_NUMBER=0;"
 pause
 @REM -------------------------> DEl_SALES_Between <----------------------------- 
 :DEl_SALES_Between
 set /p Bill_Start=Type the Number of the first Bill : 
 set /p Bill_End=Type the Number of the End Bill : 
-sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "SET QUOTED_IDENTIFIER ON; DELETE FROM T_TELE_SCH; DELETE FROM T_APP_INVOICE; DELETE FROM T_USER_ERROR; DELETE FROM T_SALES_DISCOUNT WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_IN_OUT WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_UNIT_FORM; DELETE FROM T_UNIT_FORM_INFO; DELETE FROM T_SALES WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_PATROL WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_DETAILS WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_TEMP WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_STORE_BOX WHERE B_CODE=2 AND BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_BOX WHERE B_CODE=2 AND BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%;"
+sqlcmd %SQL_Connection% -d %DB_NAME% -Q "SET QUOTED_IDENTIFIER ON; DELETE FROM T_TELE_SCH; DELETE FROM T_APP_INVOICE; DELETE FROM T_USER_ERROR; DELETE FROM T_SALES_DISCOUNT WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_IN_OUT WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_UNIT_FORM; DELETE FROM T_UNIT_FORM_INFO; DELETE FROM T_SALES WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_PATROL WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_DETAILS WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_SALES_TEMP WHERE BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_STORE_BOX WHERE B_CODE=2 AND BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%; DELETE FROM T_BOX WHERE B_CODE=2 AND BILL_NUMBER BETWEEN %Bill_Start% AND %Bill_End%;"
 pause
 goto Main_Menu
 
 @REM -------------------------> Promise_SA_ENABLE_BROKER <----------------------------- 
 :Promise_SA_ENABLE_BROKER
-sqlcmd %SQL_Connecction% -d %DB_NAME% -Q "EXEC sp_changedbowner sa; ALTER DATABASE %DB_NAME% SET RESTRICTED_USER;ALTER DATABASE %DB_NAME% SET ENABLE_BROKER;ALTER DATABASE %DB_NAME% SET Multi_User"
+sqlcmd %SQL_Connection% -d %DB_NAME% -Q "EXEC sp_changedbowner sa; ALTER DATABASE %DB_NAME% SET RESTRICTED_USER;ALTER DATABASE %DB_NAME% SET ENABLE_BROKER;ALTER DATABASE %DB_NAME% SET Multi_User"
 echo Done
 pause
 goto Main_Menu
@@ -993,32 +1129,38 @@ goto Main_Menu
 cls
 echo.
 echo.
-echo                  -------------------------------------------------------------
-echo.                                          Solutions
-echo                  -------------------------------------------------------------
+echo.           
 echo.
-echo                     1. Date and Time                     2. Delet locale          
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                    Users Edite                                     \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                1. Date and Time               2. Delet locale                      /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                3. New Setup                   4. Stop windefend and Firewall       /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                5. Side By Side                6. Active Windows and Office         /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                7. Open SSCM (RED BAG)          8. GO Back                          /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                                      0. Exit                                       /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                     3. New Setup                         4. Stop windefend and Firewall
-echo.   
-echo                     5. Side By Side                      6. Active Windows and Office
-echo.   
-echo                     7. Open SQL Server Configuration Manager (RED BAG)  
-echo.   
-echo                     8. GO BACK                           0. Exit 
-echo.  
-echo                  -------------------------------------------------------------
-echo.
-set /p choice="Please choose an option : "
-if "%choice%"=="1" goto Date_and_Time
-if "%choice%"=="2" goto Delet_locale 
-if "%choice%"=="3" goto New_Setup 
-if "%choice%"=="4" goto Stop_windefend_and_Firewall
-if "%choice%"=="5" goto Side_By_Side
-if "%choice%"=="6" goto Active_Windows_Office
-if "%choice%"=="7" goto Open_Red_Bag
-if "%choice%"=="8" goto Main_Menu
-if "%choice%"=="0" goto Exit
+set /p Solutions_choice="           Please choose an option : "
+if "%Solutions_choice%"=="1" goto Date_and_Time
+if "%Solutions_choice%"=="2" goto Delet_locale 
+if "%Solutions_choice%"=="3" goto New_Setup 
+if "%Solutions_choice%"=="4" goto Stop_windefend_and_Firewall
+if "%Solutions_choice%"=="5" goto Side_By_Side
+if "%Solutions_choice%"=="6" goto Active_Windows_Office
+if "%Solutions_choice%"=="7" goto Open_Red_Bag
+if "%Solutions_choice%"=="8" goto Main_Menu
+if "%Solutions_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Solutions
@@ -1045,7 +1187,7 @@ pause
 goto Main_Menu
 @REM ------------------------->  Delet locale  <-------------------------
 :Delet_locale 
-@RD /S /Q "%userprofile%\AppData\Local\IRAQSOFT/"
+call :Delete_Local
 goto Main_Menu
 @REM ------------------------->  New_Setup  <-------------------------
 :New_Setup 
@@ -1122,14 +1264,7 @@ pause
 goto Main_Menu
 @REM ------------------------->  Stop_windefend_and_Firewall <-------------------------
 :Stop_windefend_and_Firewall 
-
-netsh advfirewall set publicprofile state off
-netsh advfirewall set currentprofile state off
-netsh advfirewall set domainprofile state off
-netsh advfirewall set allprofiles state off
-netsh advfirewall set privateprofile state off
-Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f 
-Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f
+call :stop_windefend_Firewall
 goto Main_Menu
 
 @REM -------------------------> Side_By_Side <-------------------------
@@ -1139,18 +1274,26 @@ if not exist %side_By_side_Files% (
     mkdir %side_By_side_Files% )
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                           App Name
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. SPEEDOO POS                 2. SPEEDOO REST
-echo.          
-echo                     3. Point POS                 
-echo.                
-echo                  -------------------------------------------------------------
+echo.           
 echo.
-set /p App_NAME_choice="Please choose an option : "
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                       App Name                                     \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                 1. SPEEDOO POS                                                     /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                 2. SPEEDOO REST                                                    /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                 3. Point POS                                                       /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo.
+set /p App_NAME_choice="           Please choose an option : "
 if "%App_NAME_choice%"=="1" (
     set "Shortcut_Part=SPEEDOO POS"
     curl -o "%side_By_side_Files%/App.config" "https://raw.githubusercontent.com/Iraqsoft95/IraqSoft/refs/heads/main/SideBySide/App.config"
@@ -1209,8 +1352,12 @@ if not defined TargetPath (
 :found_shortcut_sideByside
 set "TargetDir=%TargetPath%\.."
 robocopy "%side_By_side_Files%" "%TargetDir%" /E /COPYALL /R:0 /W:0 /V /ZB
+call 
 start "" "%TargetPath%"
 pause
+@REM ------------------------->  Delete_Local
+call :Delete_Local
+@REM ------------------------->  Delete_side_By_side_Files
 rmdir /s /q  %side_By_side_Files%
 goto Main_Menu
 @REM -------------------------> Active_Windows_Office <----------------------------- 
@@ -1226,22 +1373,28 @@ goto Main_Menu
 :Connections
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                           Connections   
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. IP Address Edite             2. PC User Management
+echo.           
 echo.
-echo                     5. GO BACK                      0. Exit 
-echo.                     
-echo                  -------------------------------------------------------------
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                    Connections                                     \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                1. IP Address Edite             2. PC User Management               /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                3. GO Back                      0. Exit                             /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-set /p choice="Please choose an option : "
-if "%choice%"=="1"  goto IP_Address_Edite   
-if "%choice%"=="2"  goto PC_User_Management  
-if "%choice%"=="5" goto Main_Menu
-if "%choice%"=="0" goto Exit
+set /p Connections_choice="           Please choose an option : "
+if "%Connections_choice%"=="1"  goto IP_Address_Edite   
+if "%Connections_choice%"=="2"  goto PC_User_Management  
+if "%Connections_choice%"=="3" goto Main_Menu
+if "%Connections_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Connections
@@ -1251,21 +1404,28 @@ goto Connections
 :select_Connection
 cls
 echo.
-echo                  -------------------------------------------------------------
-echo                                          select Connection   
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. Wi-Fi                         2. Ethernet      
+echo.           
 echo.
-echo                     3. GO BACK                       0. Exit 
-echo.                     
-echo                  -------------------------------------------------------------
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                  select Connection                                 \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                1. Wi-Fi                         2. Ethernet                        /\/\
+echo             \/\/                                                                                    \/\/   
+echo             /\/\                3. GO Back                       0. Exit                            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-set /p choice_Connection="Please choose an option : "
-if "%choice_Connection%"=="1" set Adapter_Name="Wi-Fi"& goto Main_IP_Address_Edite
-if "%choice_Connection%"=="2" set Adapter_Name="Ethernet"& goto Main_IP_Address_Edite
-if "%choice_Connection%"=="3" goto IP_Address_Edite  
-if "%choice_Connection%"=="0" goto Exit
+set /p conecting_type_choice="           Please choose an option : "
+if "%conecting_type_choice%"=="1" set Adapter_Name="Wi-Fi"& goto Main_IP_Address_Edite
+if "%conecting_type_choice%"=="2" set Adapter_Name="Ethernet"& goto Main_IP_Address_Edite
+if "%conecting_type_choice%"=="3" goto IP_Address_Edite  
+if "%conecting_type_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto select_IP_Address_Edite
@@ -1273,25 +1433,31 @@ goto select_IP_Address_Edite
 :Main_IP_Address_Edite
 cls
 echo.
-echo.                             
-echo                  -------------------------------------------------------------
-echo.                                          IP Address Edite 
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. Add IP Address               2.Delet All IP Address
+echo.           
 echo.
-echo                     3. Show All IP Address            
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                  IP Address Edite                                  \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                1. Add IP Address               2.Delet All IP Address              /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                3. Show All IP Address                                              /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                4. GO Back                      0. Exit                             /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                     5. GO BACK                      0. Exit 
-echo.                     
-echo                  -------------------------------------------------------------
-echo.
-set /p choice="Please choose an option : "
-if "%choice%"=="1"  goto Add_IP_Address   
-if "%choice%"=="2"  goto Delet_All_IP_Address  
-if "%choice%"=="3"  goto Show_All_IP_Address  
-if "%choice%"=="5" goto IP_Address_Edite
-if "%choice%"=="0" goto Exit
+set /p IP_Edite_choice="           Please choose an option : "
+if "%IP_Edite_choice%"=="1"  goto Add_IP_Address   
+if "%IP_Edite_choice%"=="2"  goto Delet_All_IP_Address  
+if "%IP_Edite_choice%"=="3"  goto Show_All_IP_Address  
+if "%IP_Edite_choice%"=="4" goto IP_Address_Edite
+if "%IP_Edite_choice%"=="0" goto Exit
 echo Invalid choice! Please choose again.
 pause
 goto Main_IP_Address_Edite
@@ -1362,28 +1528,35 @@ goto Main_Menu
 :PC_User_Management
 cls
 echo.
-echo                  -------------------------------------------------------------
-echo.                                      PC User Management
-echo                  -------------------------------------------------------------
 echo.
-echo                     1. Add User                4. MODIFY_PASSWORD                  
+echo.           
 echo.
-echo                     2. DELETE_USER             5. Modify User Privileges      
+echo.                                                                                                                                                    
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+echo             /\/\                                                                                    /\/\
+echo             \/\/                                    PC User Management                              \/\/
+echo             /\/\            ------------------------------------------------------------            /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\               1. Add User                    4. MODIFY_PASSWORD                    /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\               2. DELETE_USER                 5. Modify User Privileges             /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\               3. MODIFY_USERNAME             6. Main_Menu                          /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\                                       0.Exit                                       /\/\
+echo             \/\/                                                                                    \/\/
+echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
+echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
-echo                     3. MODIFY_USERNAME         6. Main_Menu 
-echo.
-echo                                        0.Exit 
-echo.
-echo                  -------------------------------------------------------------
-echo.
-set /p choice="Enter your choice: "
-if "%choice%"=="1" goto ADD_USER
-if "%choice%"=="2" goto DELETE_USER
-if "%choice%"=="3" goto MODIFY_USERNAME
-if "%choice%"=="4" goto MODIFY_PASSWORD
-if "%choice%"=="5" goto MODIFY_PRIVILEGES
-if "%choice%"=="6" goto Main_Menu
-if "%choice%"=="7" goto EXIT
+set /p PC_User_choice="           Enter your choice: "
+if "%PC_User_choice%"=="1" goto ADD_USER
+if "%PC_User_choice%"=="2" goto DELETE_USER
+if "%PC_User_choice%"=="3" goto MODIFY_USERNAME
+if "%PC_User_choice%"=="4" goto MODIFY_PASSWORD
+if "%PC_User_choice%"=="5" goto MODIFY_PRIVILEGES
+if "%PC_User_choice%"=="6" goto Main_Menu
+if "%PC_User_choice%"=="7" goto EXIT
 echo Invalid choice, please try again.
 pause
 goto Main_Menu
@@ -1469,11 +1642,38 @@ if %errorlevel% neq 0 (
     timeout /t 10
     goto Start_Download
 )
-
 echo Download Complete. Waiting To Opening The File...
 start "" %output%
 pause
 goto Main_Menu
+
+@REM -------------------------> Functions <-----------------------------
+:Delete_Local
+@RD /S /Q "%userprofile%\AppData\Local\IRAQSOFT/"
+exit /b
+
+@REM -------------------------> stop_windefend_Firewall <-----------------------------
+:stop_windefend_Firewall
+REM ------------Set Firewall off
+netsh advfirewall set publicprofile state off
+netsh advfirewall set currentprofile state off
+netsh advfirewall set domainprofile state off
+netsh advfirewall set allprofiles state off
+netsh advfirewall set privateprofile state off
+REM ------------------stop windefend 
+net stop windefend
+Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 1 /f
+Reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 1 /f
+exit /b
+
+@REM -------------------------> Copy mdf to file <-----------------------------
+:Copy_mdf
+net stop MSSQL$SALES_DEV
+mkdir "%Befor_Format_Path%\MDF"
+robocopy "C:\Program Files (x86)\Microsoft SQL Server\MSSQL11.SALES_DEV\MSSQL\DATA" "%Befor_Format_Path%\MDF" /E /COPYALL /R:0 /W:0 /V /ZB 
+net start MSSQL$SALES_DEV
+exit /b
+
 :Exit
 echo Exiting the program...
 pause
