@@ -1,8 +1,8 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 1.9
+title IRAQSOFT SUPPORT TOOLS V 2.0
 chcp 65001 >nul 2>&1
-
-setlocal
+setlocal enabledelayedexpansion
+::setlocal
 mode con: cols=115 lines=40
 @REM -------------------------> Run Bat Us Admin <-----------------------------
 @REM ----------->check if file Run Us Admin
@@ -129,7 +129,6 @@ set Printer_Tool_File="%Download_Path%\printer-tools.rar"
 :Start_Code
 @echo off
 setlocal enabledelayedexpansion
-set config=MTk5NQ==
 cls
 echo.
 echo.                             
@@ -155,16 +154,7 @@ echo       (_____)                                                              
 echo. 
 echo.
 echo.
-for /f "delims=" %%A in (
-  'powershell -noprofile -command "$pass = Read-Host '       Type Password: ' -AsSecureString; $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass); [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR).Trim()"'
-) do set "user_input=%%A"
-
-for /f "delims=" %%B in (
-  'powershell -noprofile -command "[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('%config%'))"'
-) do set "decoded_config=%%B"
-
-set "user_input=!user_input: =!"
-set "decoded_config=!decoded_config: =!"
+call :AUTH
 if /I "!user_input!"=="!decoded_config!" (
     goto Main_Menu
 )
@@ -765,27 +755,29 @@ pause
 goto Users_Edite 
 @REM -------------------------> Add User  <-----------------------------
 :Add_User 
-set /p answer="Enter the password to continue : "
-if /i "%answer%"=="%config%" (
+
+call :AUTH
+if /I "!user_input!"=="!decoded_config!" (
     if "%DB_NAME_choice%"=="2" (
-        sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "INSERT INTO T_USERS (  USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, IS_ENC, APP_PWD) VALUES ('0','IraqSoft','foiUfmc49d0iGecozsVrBA==','1','True','False','True','');"
+        sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "INSERT INTO T_USERS (USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, IS_ENC, APP_PWD) VALUES ('0','IraqSoft','foiUfmc49d0iGecozsVrBA==','1','True','False','True','');"
         echo Your Password: IraqSoft
         pause
         goto Main_Menu
     ) else (
-        sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "INSERT INTO T_USERS ( USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, BOX_CODE, IS_ENC, SECURETY_CODE, APP_PWD, TYPE_PRICE_CODE, STORE_CODE, MANDOOB_CODE, LEVEL_APP, DRIVER_CODE, TYPE_CH_OFFER) VALUES ('0','IraqSoft','foiUfmc49d0iGecozsVrBA==','1','True','False','5000','True','3','-10','-10','-10','','1','0','');"
-        echo Your Password: IraqSoft
+        sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "INSERT INTO T_USERS (USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, BOX_CODE, IS_ENC, SECURETY_CODE, APP_PWD, TYPE_PRICE_CODE, STORE_CODE, MANDOOB_CODE, LEVEL_APP, DRIVER_CODE, TYPE_CH_OFFER) VALUES ('0','IraqSoft','foiUfmc49d0iGecozsVrBA==','1','True','False','5000','True','3','-10','-10','-10','','1','0','');"
         pause
         goto Main_Menu
-    ) 
     )
-    echo Invalid config! Please try again.
-    pause
-    goto Add_User
+)
+
+echo Invalid config! Please try again.
+pause
+goto Add_User
+
 @REM -------------------------> Change_Pass_To_Defulte <-----------------------------
 :Change_Pass_To_Defulte
-set /p answer="Enter the password to continue : "
-if /i "%answer%"=="%config%" (
+call :AUTH
+if /I "!user_input!"=="!decoded_config!" (
 sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "UPDATE T_USERS  SET USER_PWD = 'fpd2Te7d3NwzGck5qAgK8g==' WHERE  USER_CODE = '1';"
 echo Your Password : 22 
 pause
@@ -800,8 +792,8 @@ goto Main_Menu
 sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "SELECT USER_CODE as ID, USER_NAME as Name, CASE WHEN IS_ENC = 1 THEN 'True' ELSE 'False' END as Enc  FROM T_USERS" -s "|" -W    -f 65001 -o %SCRIPT_PATH%\Users.txt 
 start notepad %SCRIPT_PATH%\Users.txt
 set /p USER_CODE="Tye the User code to delete: "
-set /p answer="Enter the password to continue : "
-if /i "%answer%"=="%config%" (
+call :AUTH
+if /I "!user_input!"=="!decoded_config!" (
 sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "DELETE FROM T_USERS WHERE USER_CODE=%USER_CODE%"
 pause
 goto Main_Menu
@@ -811,8 +803,8 @@ goto Main_Menu
 
 @REM -------------------------> Delet_All_User <-----------------------------
 :Delet_All_User
-set /p answer="Enter the password to continue : "
-if /i "%answer%"=="%config%" (
+call :AUTH
+if /I "!user_input!"=="!decoded_config!" (
     if "%DB_NAME_choice%"=="2" (
         sqlcmd %SQL_Connection% -d %DB_NAME%  -Q "Delete from T_USERS;INSERT INTO T_USERS (  USER_CODE, USER_NAME, USER_PWD, LEVEL_CODE, ACTIVE, LOG_IN, IS_ENC, APP_PWD) VALUES ('1','ADMIN','fpd2Te7d3NwzGck5qAgK8g==','1','True','False','True','');"
         echo Your Password: IraqSoft
@@ -1672,6 +1664,22 @@ net stop MSSQL$SALES_DEV
 mkdir "%Befor_Format_Path%\MDF"
 robocopy "C:\Program Files (x86)\Microsoft SQL Server\MSSQL11.SALES_DEV\MSSQL\DATA" "%Befor_Format_Path%\MDF" /E /COPYALL /R:0 /W:0 /V /ZB 
 net start MSSQL$SALES_DEV
+exit /b
+
+@REM -------------------------> AUTH <-----------------------------
+
+:AUTH
+set config=MTk5NQ==
+for /f "delims=" %%A in (
+  'powershell -noprofile -command "$pass = Read-Host '       Type Password: ' -AsSecureString; $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass); [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR).Trim()"'
+) do set "user_input=%%A"
+
+for /f "delims=" %%B in (
+  'powershell -noprofile -command "[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('%config%'))"'
+) do set "decoded_config=%%B"
+
+set "user_input=!user_input: =!"
+set "decoded_config=!decoded_config: =!"
 exit /b
 
 :Exit
