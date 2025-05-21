@@ -1852,10 +1852,6 @@ if not exist "%BACKUP_DIR%" (
     echo Folder created: %BACKUP_DIR%
     goto Backup_All_Data
 ) 
-for %%F in ("%BACKUP_DIR%\*.bak") do (
-    powershell -Command "Compress-Archive -Path '%%F' -DestinationPath '%%~dpnF.zip' -Force"
-    @REM del "%%F"
-)
 @REM cls 
 echo Backup Successful in folder %BACKUP_DIR%
 exit /b
