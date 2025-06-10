@@ -1942,7 +1942,7 @@ if not defined TargetPath (
     ) else if "%DB_NAME_choice%" == "2" (
         set "Shortcut_Part=RESTAURANT_APP"
         goto start_serch_Shortcut
-        ) if else "%DB_NAME_choice%"=="3" (
+        ) else if "%DB_NAME_choice%"=="3" (
         set "Shortcut_Part=SPEEDOO_APP"
         goto start_serch_Shortcut
 ) 
