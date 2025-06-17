@@ -1373,6 +1373,7 @@ if "%Solutions_choice%"=="1" (
 )
  
 @REM -------------------------> Date_and_Time <----------------------------- 
+:Date_and_Time
 @REM -------------------------> Step 1: Restart the Windows Time service
 echo [1/6] Restarting Windows Time service...
 sc config w32time start= auto >nul
