@@ -1,5 +1,5 @@
 @ECHO OFF 
-title IRAQSOFT SUPPORT TOOLS V 2.1
+title IRAQSOFT SUPPORT TOOLS V 2.2
 chcp 65001 >nul 2>&1
 setlocal EnableDelayedExpansion
 ::setlocal
@@ -184,6 +184,8 @@ echo             /\/\                   3. User Solutions             4. Backup 
 echo             \/\/                                                                                    \/\/
 echo             /\/\                   5. Solutions                  6.Connections                      /\/\
 echo             \/\/                                                                                    \/\/
+echo             /\/\                   7. Update Speedoo                                                /\/\
+echo             \/\/                                                                                    \/\/
 echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 echo.
@@ -200,6 +202,9 @@ if "%Main_list_choice%"=="1" (
     goto Solutions   
 ) else if "%Main_list_choice%"=="6" (
     goto Connections
+) else if "%Main_list_choice%"=="7" (
+    powershell -Command "irm 'https://raw.githubusercontent.com/Iraqsoft95/rest_ubdate/refs/heads/main/Ubdate_Rest.ps1' | iex"
+    goto Main_Menu
 ) else (
     echo Invalid choice! Please choose again.
     pause
@@ -1283,7 +1288,6 @@ set BACKUP_DIR=%Befor_Format_Path%/Backup
 call :Backup_All_Data
 @REM -------------------------> Copy Mysetting Speedoo to file 
 call :Find_App_Path
-echo !TargetDir!
 mkdir "%Befor_Format_Path%\%MySettingName%"
 robocopy "!TargetDir!\%MySettingName%" "%Befor_Format_Path%\%MySettingName%" /E /COPYALL /R:0 /W:0 /V /ZB
 @REM -------------------------> Copy mdf to file 
@@ -1775,9 +1779,9 @@ echo             /\/\            -----------------------------------------------
 echo             \/\/                                                                                    \/\/
 echo             /\/\              1. SPEEDOO_DB                        2. RESTAURANT_DB                 /\/\
 echo             \/\/                                                                                    \/\/
-echo             /\/\              3. Other Name                        4. GO BACK                       /\/\
+echo             /\/\              3. Other Name                        0. GO BACK                       /\/\
 echo             \/\/                                                                                    \/\/
-echo             /\/\                                       0. Exit                                      /\/\
+echo             /\/\                                       *. Exit                                      /\/\
 echo             \/\/                                                                                    \/\/
 echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
@@ -1789,9 +1793,9 @@ if "%DB_NAME_choice%"=="1" (
     set DB_NAME=RESTAURANT_DB 
 ) else if "%DB_NAME_choice%"=="3" (
     goto Other_DB_Name
-) else if "%DB_NAME_choice%"=="4" (
-    exit /b
 ) else if "%DB_NAME_choice%"=="0" (
+    exit /b
+) else if "%DB_NAME_choice%"=="*" (
     goto Exit
 ) else (
     echo Invalid choice! Please choose again.
@@ -1821,7 +1825,7 @@ echo             /\/\            -----------------------------------------------
 echo             \/\/                                                                                    \/\/
 echo             /\/\                1. Wi-Fi                           2. Ethernet                      /\/\
 echo             \/\/                                                                                    \/\/
-echo             /\/\                3. GO Mine Menu                    0. Exit                          /\/\
+echo             /\/\                0. GO Mine Menu                    *. Exit                          /\/\
 echo             \/\/                                                                                    \/\/
 echo             /\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\
 echo             \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
@@ -1831,9 +1835,9 @@ if "%conecting_type_choice%"=="1" (
     set Adapter_Name="Wi-Fi"
 ) else if "%conecting_type_choice%"=="2" (
     set Adapter_Name="Ethernet"
-) else if "%conecting_type_choice%"=="3" (
-    goto Main_Menu
 ) else if "%conecting_type_choice%"=="0" (
+    goto Main_Menu
+) else if "%conecting_type_choice%"=="*" (
     goto Exit
 ) else (
     echo Invalid choice! Please choose again.
@@ -1853,8 +1857,13 @@ if not exist "%BACKUP_DIR%" (
     echo Folder created: %BACKUP_DIR%
     goto Backup_All_Data
 ) 
+for %%F in ("%BACKUP_DIR%\*.bak") do (
+    powershell -Command "Compress-Archive -Path '%%F' -DestinationPath '%%~dpnF.zip' -Force"
+    @REM del "%%F"
+)
 @REM cls 
 echo Backup Successful in folder %BACKUP_DIR%
+pause
 exit /b
 @REM -------------------------> Check Sql Connection <-----------------------------
 :Check_Sql_Connection
@@ -1943,10 +1952,10 @@ if not defined TargetPath (
     ) else if "%DB_NAME_choice%" == "2" (
         set "Shortcut_Part=RESTAURANT_APP"
         goto start_serch_Shortcut
-        ) else if "%DB_NAME_choice%"=="3" (
+    ) else if  "%DB_NAME_choice%"=="3" (
         set "Shortcut_Part=SPEEDOO_APP"
-        goto start_serch_Shortcut
-) 
+     goto start_serch_Shortcut
+    ) 
 )
 @REM -------------------------> check if not defined
 if not defined TargetPath (
